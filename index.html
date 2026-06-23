@@ -198,11 +198,11 @@ body{font-family:var(--font);background:var(--white);color:var(--black);font-siz
     <div class="hero-eyebrow">Investment Return Portal</div>
     <h1>Anisul Islam Chowdhury</h1>
     <p class="hero-bio">A Bangladeshi entrepreneur. Failed not from lack of vision, but from trusting the wrong people and leading with emotion over logic. Now rebuilding — with <em>experience as his greatest asset.</em></p>
-    <div class="hero-cta">
-      <button onclick="openClaimPage()" class="btn btn-black" style="flex:1;max-width:200px;">Submit a Claim</button>
-      <div class="status-btn-wrap">
+    <div style="display:flex;gap:10px;justify-content:center;padding:0 20px;">
+      <button onclick="openClaimPage()" class="btn btn-black" style="flex:1;white-space:nowrap;font-size:13px;padding:13px 16px;">Submit a Claim</button>
+      <div class="status-btn-wrap" style="flex:1;">
         <span class="ext-dot" id="status-ext-dot"></span>
-        <button onclick="openStatusPage()" class="btn btn-outline btn-full">Check Status</button>
+        <button onclick="openStatusPage()" class="btn btn-outline btn-full" style="white-space:nowrap;font-size:13px;padding:13px 16px;">Check Status</button>
       </div>
     </div>
   </section>
@@ -926,22 +926,29 @@ function closeDetail(){document.getElementById('detail-overlay').classList.add('
 
 async function updateClaimStatus(id,status){
   await sb.upd('claims',{status},`?id=eq.${id}`);
-  const idx=allClaims.findIndex(c=>c.id==id);if(idx>=0)allClaims[idx].status=status;
+  const claimIdx=allClaims.findIndex(c=>c.id==id);
+  if(claimIdx>=0)allClaims[claimIdx].status=status;
   const sec=document.getElementById('correction-note-section');
   if(sec)sec.classList.toggle('hidden',status!=='correction');
-  const claim=allClaims[idx];
-  if(claim&&(status==='approved'||status==='paid'||status==='correction'))
-    await sb.ins('notifications',{type:'status_update',title:`Claim ${status==='correction'?'Needs Correction':status}`,body:status==='correction'?'Admin requested corrections.':'Your claim status updated.',for_mobile:claim.mobile,for_admin:false,is_read:false});
+  const theClaim=claimIdx>=0?allClaims[claimIdx]:null;
+  if(theClaim&&(status==='approved'||status==='paid'||status==='correction')){
+    await sb.ins('notifications',{type:'status_update',title:`Claim ${status==='correction'?'Needs Correction':status}`,body:status==='correction'?'Admin requested corrections to your claim.':'Your claim status has been updated.',for_mobile:theClaim.mobile,for_admin:false,is_read:false});
+  }
   renderOverview();
 }
 async function saveCorrectionNote(id){
   const note=document.getElementById('correction-note-input')?.value||'';
+  if(!note.trim()){alert('Please write a correction note for the claimer.');return;}
   await sb.upd('claims',{correction_note:note,status:'correction'},`?id=eq.${id}`);
-  const idx=allClaims.findIndex(c=>c.id==id);
-  if(idx>=0){allClaims[idx].correction_note=note;allClaims[idx].status='correction';}
-  const claim=allClaims[idx];
-  await sb.ins('notifications',{type:'correction',title:'Correction Required',body:`Admin note: ${note.substring(0,80)}`,for_mobile:claim?.mobile,for_admin:false,is_read:false});
-  alert('✅ Correction note saved!');
+  const claimIdx=allClaims.findIndex(c=>c.id==id);
+  if(claimIdx>=0){allClaims[claimIdx].correction_note=note;allClaims[claimIdx].status='correction';}
+  const theClaim=claimIdx>=0?allClaims[claimIdx]:null;
+  if(theClaim?.mobile){
+    await sb.ins('notifications',{type:'correction',title:'Correction Required',body:`Admin note: ${note.substring(0,80)}`,for_mobile:theClaim.mobile,for_admin:false,is_read:false});
+  }
+  await loadAdminData();
+  closeDetail();
+  alert('✅ Correction note saved! Claimer will see it on their status page.');
 }
 function payTab(mode,el){
   currentPayMode=mode;

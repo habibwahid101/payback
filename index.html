@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#000000">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Payback">
+<link rel="manifest" href="/manifest.json">
 <title>Payback — Anisul Islam Chowdhury</title>
 <style>
 :root{
@@ -245,14 +246,14 @@ body{font-family:var(--font);background:var(--white);color:var(--black);font-siz
 <div id="claim-page" class="hidden" style="min-height:100vh;">
   <div class="page-header">
     <button class="page-header-back" onclick="closeClaimPage()">&#8592;</button>
-    <div><div class="page-header-title">Submit a Claim</div><div class="page-header-sub">&#2476;&#2495;&#2472;&#2495;&#2479;&#2492;&#2507;&#2455; &#2YourFontBack &#2470;&#2494;&#2476;&#2495; &#2453;&#2480;&#2497;&#2472;</div></div>
+    <div><div class="page-header-title">Submit a Claim</div><div class="page-header-sub">বিনিয়োগ ফেরত দাবি করুন</div></div>
   </div>
   <div style="padding:24px 20px 50px;max-width:480px;margin:0 auto;">
     <div id="claim-alert"></div>
     <div id="claim-success-view" class="hidden" style="text-align:center;padding:40px 20px;">
       <div style="font-size:56px;margin-bottom:16px;">&#9989;</div>
       <div style="font-size:20px;font-weight:800;margin-bottom:8px;">Claim Submitted!</div>
-      <div style="font-size:14px;color:var(--gray-500);margin-bottom:28px;">&#2438;&#2474;&#2472;&#2494;&#2480; &#2470;&#2494;&#2476;&#2495; &#2488;&#2YourFontBack&#2476;&#2472;&#2509;&#2453;&#2499;&#2474;&#2492;&#2503;&#2470;&#2495;&#2503; &#2460;&#2478;&#2494; &#2489;&#2479;&#2492;&#2503;&#2459;&#2503;&#964;</div>
+      <div style="font-size:14px;color:var(--gray-500);margin-bottom:28px;">আপনার দাবি সফলভাবে জমা হয়েছে। আমরা শীঘ্রই যোগাযোগ করব।</div>
       <button onclick="closeClaimPage()" class="btn btn-black btn-full">&#8592; Back to Home</button>
     </div>
     <div id="claim-form-view">
@@ -280,7 +281,7 @@ body{font-family:var(--font);background:var(--white);color:var(--black);font-siz
 <div id="edit-claim-page" class="hidden" style="min-height:100vh;">
   <div class="page-header">
     <button class="page-header-back" onclick="closeEditClaimPage()">&#8592;</button>
-    <div><div class="page-header-title">Edit &amp; Resubmit</div><div class="page-header-sub">&#2468;&#2469;&#2509;&#2479; &#2488;&#2A488;&#2av&#2the87;&#2শোধন করুন</div></div>
+    <div><div class="page-header-title">Edit &amp; Resubmit</div><div class="page-header-sub">তথ্য সংশোধন করুন</div></div>
   </div>
   <div style="padding:24px 20px 50px;max-width:480px;margin:0 auto;">
     <div id="edit-correction-note"></div>
@@ -644,8 +645,9 @@ async function searchStatus(){
   const mobile=document.getElementById('sp-mobile').value.trim();
   if(!/^01[3-9]\d{8}$/.test(mobile)){document.getElementById('sp-alert').innerHTML='<div class="alert alert-error">Invalid mobile number</div>';return;}
   const btn=document.getElementById('sp-search-btn');btn.innerHTML='<span class="spinner"></span>';btn.disabled=true;
-  try{await sb.ins('last_seen',{mobile,last_seen_at:new Date().toISOString()});}catch(e){}
-  try{await sb.upd('last_seen',{last_seen_at:new Date().toISOString()},`?mobile=eq.${mobile}`);}catch(e){}
+  try{
+    await fetch(`${SURL}/rest/v1/last_seen`,{method:'POST',headers:{'apikey':SKEY,'Authorization':`Bearer ${SKEY}`,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=representation'},body:JSON.stringify({mobile,last_seen_at:new Date().toISOString()})});
+  }catch(e){}
   await sb.upd('notifications',{is_read:true},`?for_mobile=eq.${mobile}&is_read=eq.false`);
   const{data,error}=await sb.sel('claims',`?mobile=eq.${mobile}&order=created_at.desc`);
   btn.innerHTML='Search · খুঁজুন';btn.disabled=false;
@@ -1155,6 +1157,16 @@ window.addEventListener('DOMContentLoaded',()=>{loadDeliveryCharge();});
 document.getElementById('detail-overlay').addEventListener('click',function(e){if(e.target===this)closeDetail();});
 document.getElementById('order-detail-overlay').addEventListener('click',function(e){if(e.target===this)closeOrderDetail();});
 document.addEventListener('click',function(e){if(notifPanelOpen&&!e.target.closest('.bell-btn')&&!e.target.closest('.notif-panel')){notifPanelOpen=false;document.getElementById('notif-panel').classList.add('hidden');}});
+</script>
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('/sw.js')
+      .then(r=>console.log('SW registered'))
+      .catch(e=>console.log('SW failed',e));
+  });
+}
 </script>
 </body>
 </html>

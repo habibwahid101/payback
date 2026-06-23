@@ -4,16 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5">
 <meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Payback">
 <title>Payback — Anisul Islam Chowdhury</title>
 <style>
-:root {
-  --black:#0a0a0a;--white:#ffffff;--gray-100:#f5f5f5;--gray-200:#e8e8e8;
+:root{
+  --black:#0a0a0a;--white:#fff;--gray-100:#f5f5f5;--gray-200:#e8e8e8;
   --gray-300:#d0d0d0;--gray-500:#888;--gray-700:#444;
   --orange:#f97316;--orange-light:#fff7ed;
   --green:#22c55e;--green-light:#f0fdf4;
   --blue:#3b82f6;--blue-light:#eff6ff;
   --red:#ef4444;--red-light:#fef2f2;
-  --purple:#8b5cf6;--purple-light:#f5f3ff;
+  --yellow:#f59e0b;--yellow-light:#fffbeb;
   --font:'Segoe UI',system-ui,-apple-system,sans-serif;
   --radius:10px;--shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);
 }
@@ -21,199 +23,174 @@
 body{font-family:var(--font);background:var(--white);color:var(--black);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;}
 .hidden{display:none!important;}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:13px 24px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;transition:all .18s;font-family:var(--font);text-decoration:none;}
-.btn-black{background:var(--black);color:var(--white);}
-.btn-black:hover{background:#222;transform:translateY(-1px);}
-.btn-black:disabled{background:var(--gray-300);color:var(--gray-500);cursor:not-allowed;transform:none;}
-.btn-outline{background:transparent;color:var(--black);border:1.5px solid var(--black);}
-.btn-outline:hover{background:var(--black);color:var(--white);}
-.btn-sm{padding:8px 16px;font-size:13px;}
-.btn-full{width:100%;}
-.btn-danger{background:var(--red);color:#fff;}
-.btn-green{background:var(--green);color:#fff;}
-.btn-orange{background:var(--orange);color:#fff;}
+.btn-black{background:var(--black);color:#fff;}.btn-black:hover{background:#222;}.btn-black:disabled{background:var(--gray-300);color:var(--gray-500);cursor:not-allowed;}
+.btn-outline{background:transparent;color:var(--black);border:1.5px solid var(--black);}.btn-outline:hover{background:var(--black);color:#fff;}
+.btn-sm{padding:8px 16px;font-size:13px;}.btn-full{width:100%;}
+.btn-danger{background:var(--red);color:#fff;}.btn-green{background:var(--green);color:#fff;}.btn-yellow{background:var(--yellow);color:#fff;}
 .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;}
-.badge-pending{background:#fef9c3;color:#854d0e;}
-.badge-approved{background:var(--green-light);color:#15803d;}
-.badge-paid{background:var(--green-light);color:#15803d;}
-.badge-rejected{background:var(--red-light);color:#b91c1c;}
-.badge-active{background:var(--green-light);color:#15803d;}
-.badge-expired{background:var(--gray-100);color:var(--gray-500);}
+.badge-pending{background:#fef9c3;color:#854d0e;}.badge-approved{background:var(--green-light);color:#15803d;}
+.badge-paid{background:var(--green-light);color:#15803d;}.badge-rejected{background:var(--red-light);color:#b91c1c;}
+.badge-correction{background:var(--yellow-light);color:#92400e;border:1px solid #fcd34d;}
+.badge-active{background:var(--green-light);color:#15803d;}.badge-expired{background:var(--gray-100);color:var(--gray-500);}
+.badge-scheduled{background:var(--blue-light);color:#1d4ed8;}
+.badge-order-pending{background:#fef9c3;color:#854d0e;}.badge-order-confirmed{background:var(--blue-light);color:#1d4ed8;}
+.badge-order-shipped{background:var(--orange-light);color:#c2410c;}.badge-order-delivered{background:var(--green-light);color:#15803d;}
+.badge-order-cancelled{background:var(--red-light);color:#b91c1c;}
 .alert{padding:12px 15px;border-radius:8px;font-size:13px;margin-bottom:14px;}
 .alert-success{background:var(--green-light);color:#15803d;border:1px solid #bbf7d0;}
 .alert-error{background:var(--red-light);color:#b91c1c;border:1px solid #fecaca;}
 .alert-info{background:var(--blue-light);color:#1d4ed8;border:1px solid #bfdbfe;}
+.alert-warning{background:var(--yellow-light);color:#92400e;border:1px solid #fcd34d;}
 .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.amount-due{color:var(--orange);font-weight:700;}
-.amount-paid{color:var(--green);font-weight:700;}
-/* TOPBAR */
-.topbar{background:var(--black);color:var(--white);padding:14px 20px;display:flex;align-items:center;justify-content:center;position:sticky;top:0;z-index:100;}
-.topbar-logo{display:flex;align-items:center;flex-direction:column;gap:4px;text-align:center;font-weight:800;font-size:18px;letter-spacing:-0.5px;text-decoration:none;color:var(--white);}
-/* HERO */
+.amount-due{color:var(--orange);font-weight:700;}.amount-paid{color:var(--green);font-weight:700;}
+.topbar{background:var(--black);padding:14px 20px;display:flex;align-items:center;justify-content:center;position:sticky;top:0;z-index:100;}
+.topbar-logo{display:flex;flex-direction:column;align-items:center;gap:4px;font-weight:800;font-size:18px;letter-spacing:-.5px;text-decoration:none;color:#fff;position:relative;}
+.notif-dot{position:absolute;top:-4px;right:-10px;width:10px;height:10px;background:var(--red);border-radius:50%;border:2px solid var(--black);display:none;}
+.notif-dot.show{display:block;}
 .hero{padding:60px 20px 50px;max-width:560px;margin:0 auto;text-align:center;}
 .hero-eyebrow{display:inline-block;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray-500);border:1px solid var(--gray-300);border-radius:20px;padding:4px 14px;margin-bottom:22px;}
 .hero h1{font-size:32px;font-weight:800;line-height:1.18;letter-spacing:-1px;margin-bottom:14px;}
 .hero-bio{font-size:15px;color:var(--gray-700);line-height:1.75;margin-bottom:32px;}
 .hero-bio em{font-style:normal;font-weight:600;color:var(--black);}
 .hero-cta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
-/* FORM */
+.status-btn-wrap{position:relative;display:inline-flex;flex:1;max-width:200px;}
+.status-btn-wrap .ext-dot{position:absolute;top:-5px;right:-5px;width:12px;height:12px;background:var(--red);border-radius:50%;border:2px solid #fff;display:none;z-index:1;}
+.status-btn-wrap .ext-dot.show{display:block;}
+.page-header{background:var(--black);padding:14px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;}
+.page-header-back{background:rgba(255,255,255,.1);border:none;color:#fff;width:36px;height:36px;border-radius:8px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.page-header-title{color:#fff;font-weight:800;font-size:16px;}
+.page-header-sub{font-size:11px;color:rgba(255,255,255,.5);}
 .form-group{margin-bottom:16px;}
 .form-label{display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-700);margin-bottom:6px;}
-.form-label .bn{font-size:12px;font-weight:500;color:var(--gray-500);text-transform:none;letter-spacing:0;}
 .form-label .req{color:var(--red);margin-left:2px;}
-.form-input{width:100%;border:1.5px solid var(--gray-200);border-radius:8px;padding:12px 14px;font-size:14px;font-family:var(--font);outline:none;transition:border-color .18s,box-shadow .18s;background:var(--white);color:var(--black);}
+.form-input{width:100%;border:1.5px solid var(--gray-200);border-radius:8px;padding:12px 14px;font-size:14px;font-family:var(--font);outline:none;transition:border-color .18s;background:#fff;color:var(--black);}
 .form-input:focus{border-color:var(--black);box-shadow:0 0 0 3px rgba(0,0,0,.06);}
+.form-input:disabled{background:var(--gray-100);color:var(--gray-500);}
 .form-hint{font-size:11px;color:var(--gray-500);margin-top:4px;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .due-display{background:var(--orange-light);border:1.5px solid #fed7aa;border-radius:8px;padding:12px 14px;font-size:18px;font-weight:800;color:var(--orange);}
-.due-display .due-label{font-size:11px;font-weight:600;color:#c2410c;display:block;margin-bottom:2px;}
-.terms-row{display:flex;gap:10px;align-items:flex-start;padding:14px;background:var(--gray-100);border-radius:8px;margin-bottom:16px;margin-top:4px;}
+.due-label{font-size:11px;font-weight:600;color:#c2410c;display:block;margin-bottom:2px;}
+.terms-row{display:flex;gap:10px;align-items:flex-start;padding:14px;background:var(--gray-100);border-radius:8px;margin-bottom:16px;}
 .terms-row input[type=checkbox]{width:17px;height:17px;margin-top:2px;flex-shrink:0;cursor:pointer;accent-color:var(--black);}
 .terms-row label{font-size:13px;color:var(--gray-700);cursor:pointer;}
 .terms-row a{color:var(--black);font-weight:600;}
-/* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .2s ease;}
 @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
-.modal-box{background:var(--white);width:100%;max-width:560px;border-radius:20px 20px 0 0;max-height:88vh;overflow-y:auto;animation:slideUp .25s ease;}
+.modal-box{background:#fff;width:100%;max-width:560px;border-radius:20px 20px 0 0;max-height:90vh;overflow-y:auto;animation:slideUp .25s ease;}
 @keyframes slideUp{from{transform:translateY(40px);opacity:0;}to{transform:translateY(0);opacity:1;}}
 .modal-handle{width:36px;height:4px;background:var(--gray-300);border-radius:2px;margin:14px auto 0;}
 .modal-header{padding:18px 20px 14px;border-bottom:1px solid var(--gray-200);display:flex;justify-content:space-between;align-items:center;}
 .modal-header h3{font-size:16px;font-weight:800;}
-.modal-close{background:var(--gray-100);border:none;border-radius:50%;width:32px;height:32px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;}
+.modal-close{background:var(--gray-100);border:none;border-radius:50%;width:32px;height:32px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .modal-body{padding:20px;}
 .modal-body h4{font-size:14px;font-weight:700;margin:18px 0 8px;}
 .modal-body p,.modal-body li{font-size:13px;color:var(--gray-700);line-height:1.7;margin-bottom:8px;}
-.modal-body ul{padding-left:18px;}
 .modal-footer{padding:14px 20px;border-top:1px solid var(--gray-200);}
-/* ADMIN LOGIN */
 #admin-login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--black);padding:20px;}
-.login-card{background:var(--white);border-radius:16px;padding:36px 28px;width:100%;max-width:360px;}
-.login-logo{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:800;margin-bottom:28px;}
-/* ADMIN DASHBOARD */
+.login-card{background:#fff;border-radius:16px;padding:36px 28px;width:100%;max-width:360px;}
 #admin-page{min-height:100vh;background:var(--gray-100);}
-.admin-topbar{background:var(--black);color:var(--white);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
-.admin-topbar .brand{font-weight:800;font-size:16px;display:flex;align-items:center;gap:8px;}
-.admin-topbar .brand span{font-weight:400;font-size:12px;color:rgba(255,255,255,.5);}
-.admin-nav{display:flex;gap:4px;overflow-x:auto;}
-.admin-nav button{background:none;border:none;color:rgba(255,255,255,.6);font-size:12px;font-weight:600;padding:6px 12px;border-radius:6px;cursor:pointer;white-space:nowrap;font-family:var(--font);transition:all .15s;}
+.admin-topbar{background:var(--black);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+.admin-brand{font-weight:800;font-size:16px;display:flex;align-items:center;gap:8px;}
+.admin-brand span{font-weight:400;font-size:12px;color:rgba(255,255,255,.5);}
+.admin-right{display:flex;align-items:center;gap:10px;}
+.bell-btn{background:rgba(255,255,255,.1);border:none;color:#fff;width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;position:relative;}
+.bell-badge{position:absolute;top:-3px;right:-3px;background:var(--red);color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:none;align-items:center;justify-content:center;padding:0 3px;}
+.bell-badge.show{display:flex;}
+.admin-nav{display:flex;gap:4px;overflow-x:auto;background:var(--black);padding:0 16px;}
+.admin-nav button{background:none;border:none;color:rgba(255,255,255,.6);font-size:12px;font-weight:600;padding:8px 12px;border-radius:6px;cursor:pointer;white-space:nowrap;font-family:var(--font);transition:all .15s;}
 .admin-nav button.active,.admin-nav button:hover{background:rgba(255,255,255,.12);color:#fff;}
 .admin-body{padding:16px 16px 40px;max-width:700px;margin:0 auto;}
 .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
-.stat-card{background:var(--white);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);}
+.stat-card{background:#fff;border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);}
 .stat-card .s-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-500);margin-bottom:6px;}
 .stat-card .s-num{font-size:26px;font-weight:800;line-height:1;}
-.stat-card .s-num.orange{color:var(--orange);}
-.stat-card .s-num.green{color:var(--green);}
-.admin-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:14px;}
+.stat-card .s-num.orange{color:var(--orange);}.stat-card .s-num.green{color:var(--green);}
+.admin-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:14px;}
 .admin-card-header{padding:14px 16px;border-bottom:1px solid var(--gray-200);display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:14px;}
 .admin-card-body{padding:16px;}
-.search-row{display:flex;gap:8px;margin-bottom:12px;}
-.search-input{flex:1;border:1.5px solid var(--gray-200);border-radius:8px;padding:10px 13px;font-size:13px;font-family:var(--font);outline:none;}
+.search-row{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+.search-input{flex:1;min-width:120px;border:1.5px solid var(--gray-200);border-radius:8px;padding:10px 13px;font-size:13px;font-family:var(--font);outline:none;}
 .search-input:focus{border-color:var(--black);}
-.filter-select{border:1.5px solid var(--gray-200);border-radius:8px;padding:10px 12px;font-size:13px;font-family:var(--font);outline:none;background:var(--white);cursor:pointer;}
-.claim-item{border:1px solid var(--gray-200);border-radius:8px;padding:14px;margin-bottom:10px;cursor:pointer;transition:all .15s;background:var(--white);}
+.filter-select{border:1.5px solid var(--gray-200);border-radius:8px;padding:10px 12px;font-size:13px;font-family:var(--font);outline:none;background:#fff;cursor:pointer;}
+.claim-item{border:1px solid var(--gray-200);border-radius:8px;padding:14px;margin-bottom:10px;cursor:pointer;transition:all .15s;background:#fff;}
 .claim-item:hover{border-color:var(--black);box-shadow:var(--shadow);}
 .claim-item-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
-.claim-item-name{font-weight:700;font-size:14px;}
-.claim-item-company{font-size:12px;color:var(--gray-500);margin-top:2px;}
-.claim-item-amounts{display:flex;gap:14px;flex-wrap:wrap;}
-.claim-item-amounts .amt{font-size:13px;}
-.claim-item-amounts .amt .v{font-weight:700;}
+.claim-item-name{font-weight:700;font-size:14px;}.claim-item-company{font-size:12px;color:var(--gray-500);margin-top:2px;}
+.claim-amounts{display:flex;gap:12px;flex-wrap:wrap;}.claim-amounts .amt{font-size:13px;}.claim-amounts .amt .v{font-weight:700;}
 .no-data{text-align:center;padding:40px;color:var(--gray-500);font-size:14px;}
-/* DETAIL PANEL */
 .detail-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:flex-end;justify-content:center;}
-.detail-panel{background:var(--white);width:100%;max-width:600px;border-radius:20px 20px 0 0;max-height:92vh;overflow-y:auto;animation:slideUp .25s ease;}
-.detail-panel-header{padding:20px 18px 14px;border-bottom:1px solid var(--gray-200);position:sticky;top:0;background:var(--white);z-index:10;display:flex;justify-content:space-between;align-items:center;}
+.detail-panel{background:#fff;width:100%;max-width:600px;border-radius:20px 20px 0 0;max-height:92vh;overflow-y:auto;animation:slideUp .25s ease;}
+.detail-panel-header{padding:20px 18px 14px;border-bottom:1px solid var(--gray-200);position:sticky;top:0;background:#fff;z-index:10;display:flex;justify-content:space-between;align-items:center;}
 .detail-panel-header h3{font-size:16px;font-weight:800;}
 .detail-panel-body{padding:18px;}
 .detail-amounts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:18px;}
 .detail-amt-card{border-radius:8px;padding:12px;text-align:center;}
-.detail-amt-card.invested{background:var(--gray-100);}
-.detail-amt-card.paid{background:var(--green-light);}
-.detail-amt-card.due{background:var(--orange-light);}
-.detail-amt-card .dac-val{font-size:20px;font-weight:800;display:block;}
-.detail-amt-card.invested .dac-val{color:var(--black);}
-.detail-amt-card.paid .dac-val{color:var(--green);}
-.detail-amt-card.due .dac-val{color:var(--orange);}
-.detail-amt-card .dac-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:2px;color:var(--gray-500);}
-.detail-info-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--gray-100);font-size:14px;}
-.detail-info-row:last-child{border-bottom:none;}
-.detail-info-row .k{color:var(--gray-500);font-size:13px;}
-.detail-info-row .v{font-weight:600;text-align:right;max-width:200px;word-break:break-word;}
+.detail-amt-card.invested{background:var(--gray-100);}.detail-amt-card.paid{background:var(--green-light);}.detail-amt-card.due{background:var(--orange-light);}
+.dac-val{font-size:18px;font-weight:800;display:block;}
+.detail-amt-card.invested .dac-val{color:var(--black);}.detail-amt-card.paid .dac-val{color:var(--green);}.detail-amt-card.due .dac-val{color:var(--orange);}
+.dac-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:2px;color:var(--gray-500);}
+.info-row{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--gray-100);font-size:14px;}
+.info-row:last-child{border-bottom:none;}.info-row .k{color:var(--gray-500);font-size:13px;flex-shrink:0;}.info-row .v{font-weight:600;text-align:right;max-width:220px;word-break:break-word;}
 .pay-section{margin-top:20px;border-top:1px solid var(--gray-200);padding-top:18px;}
 .pay-section h4{font-size:14px;font-weight:800;margin-bottom:14px;}
-.pay-mode-tabs{display:flex;gap:8px;margin-bottom:14px;}
-.pay-mode-tab{flex:1;padding:9px;border:1.5px solid var(--gray-200);border-radius:8px;background:var(--white);cursor:pointer;font-size:12px;font-weight:600;text-align:center;transition:all .15s;font-family:var(--font);}
-.pay-mode-tab.active{border-color:var(--black);background:var(--black);color:var(--white);}
-.pay-calc-display{background:var(--gray-100);border-radius:8px;padding:14px;margin-bottom:14px;}
-.pay-calc-display .calc-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;}
-.pay-calc-display .calc-row:last-child{margin-bottom:0;font-weight:700;font-size:15px;}
-.pay-calc-display .calc-row .green{color:var(--green);}
+.pay-tabs{display:flex;gap:8px;margin-bottom:14px;}
+.pay-tab{flex:1;padding:9px;border:1.5px solid var(--gray-200);border-radius:8px;background:#fff;cursor:pointer;font-size:12px;font-weight:600;text-align:center;transition:all .15s;font-family:var(--font);}
+.pay-tab.active{border-color:var(--black);background:var(--black);color:#fff;}
+.calc-box{background:var(--gray-100);border-radius:8px;padding:14px;margin-bottom:14px;}
+.calc-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;}
+.calc-row:last-child{margin-bottom:0;font-weight:700;font-size:15px;}
 .ph-list{margin-top:14px;}
 .ph-list h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-500);margin-bottom:10px;}
 .ph-entry{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:8px;margin-bottom:6px;font-size:13px;}
-.ph-entry.payment{background:var(--green-light);}
-.ph-entry.order{background:var(--blue-light);}
-.ph-entry .ph-left{}
-.ph-entry .ph-left .ph-note{font-size:11px;color:var(--gray-500);margin-top:2px;}
-.ph-entry .ph-right{text-align:right;}
-.ph-entry.payment .ph-amt{font-weight:800;color:var(--green);}
-.ph-entry.order .ph-amt{font-weight:800;color:var(--blue);}
-.ph-entry .ph-date{font-size:11px;color:var(--gray-500);}
-/* GLOBAL DIST */
-.global-pay-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:14px;}
-.global-pay-card h3{font-size:15px;font-weight:800;margin-bottom:14px;}
-.pct-input-row{display:flex;gap:10px;align-items:center;margin-bottom:14px;}
-.pct-input-row input{flex:1;border:1.5px solid var(--gray-200);border-radius:8px;padding:12px 14px;font-size:18px;font-weight:700;font-family:var(--font);outline:none;text-align:center;}
-.pct-input-row input:focus{border-color:var(--black);}
-.pct-input-row .pct-sym{font-size:22px;font-weight:800;color:var(--gray-500);}
-.global-preview{background:var(--gray-100);border-radius:8px;padding:14px;margin-bottom:14px;}
-.global-preview p{font-size:13px;color:var(--gray-700);margin-bottom:6px;}
-/* OFFER CARD */
-.offer-card{border-radius:14px;overflow:hidden;margin-bottom:20px;border:2px solid var(--black);background:var(--white);box-shadow:0 4px 20px rgba(0,0,0,.1);}
-.offer-card-img{width:100%;height:180px;object-fit:cover;display:block;background:var(--gray-100);}
-.offer-card-img-placeholder{width:100%;height:180px;background:linear-gradient(135deg,#0a0a0a,#333);display:flex;align-items:center;justify-content:center;font-size:40px;}
+.ph-entry.payment{background:var(--green-light);}.ph-entry.order-entry{background:var(--blue-light);}
+.ph-note{font-size:11px;color:var(--gray-500);margin-top:2px;}
+.ph-amt-green{font-weight:800;color:var(--green);}.ph-amt-blue{font-weight:800;color:var(--blue);}
+.offer-card{border-radius:14px;overflow:hidden;margin-bottom:16px;border:2px solid var(--black);background:#fff;box-shadow:0 4px 20px rgba(0,0,0,.1);}
+.offer-card-img{width:100%;height:180px;object-fit:cover;display:block;}
+.offer-card-img-placeholder{width:100%;height:160px;background:linear-gradient(135deg,#0a0a0a,#333);display:flex;align-items:center;justify-content:center;font-size:40px;}
 .offer-card-body{padding:16px;}
-.offer-card-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--orange);margin-bottom:6px;}
-.offer-card-title{font-size:18px;font-weight:800;margin-bottom:6px;line-height:1.3;}
-.offer-card-desc{font-size:13px;color:var(--gray-700);margin-bottom:12px;line-height:1.6;}
-.offer-card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--gray-200);}
-.offer-price{font-size:22px;font-weight:800;color:var(--black);}
-.offer-price .currency{font-size:14px;font-weight:600;color:var(--gray-500);}
-.offer-expiry{font-size:11px;color:var(--gray-500);margin-top:4px;}
-.offer-expired-banner{background:var(--gray-100);text-align:center;padding:8px;font-size:12px;color:var(--gray-500);font-weight:600;}
+.offer-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--orange);margin-bottom:6px;}
+.offer-title{font-size:18px;font-weight:800;margin-bottom:6px;line-height:1.3;}
+.offer-desc{font-size:13px;color:var(--gray-700);margin-bottom:12px;line-height:1.6;}
+.offer-footer{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--gray-200);}
+.offer-price{font-size:22px;font-weight:800;}.offer-price .cur{font-size:14px;font-weight:600;color:var(--gray-500);}
+.offer-total{font-size:11px;color:var(--gray-500);margin-top:2px;}.offer-expiry{font-size:11px;color:var(--gray-500);}
+.ordered-badge{background:var(--green-light);color:#15803d;border:1px solid #bbf7d0;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600;text-align:center;}
 .view-all-btn{display:block;text-align:center;padding:12px;border:1.5px dashed var(--gray-300);border-radius:10px;color:var(--gray-500);font-size:13px;font-weight:600;cursor:pointer;background:none;width:100%;font-family:var(--font);margin-bottom:16px;}
 .view-all-btn:hover{border-color:var(--black);color:var(--black);}
-/* OLD OFFER ITEM */
-.old-offer-item{border:1px solid var(--gray-200);border-radius:8px;padding:12px;margin-bottom:8px;display:flex;gap:12px;align-items:center;}
-.old-offer-item img{width:50px;height:50px;object-fit:cover;border-radius:6px;flex-shrink:0;background:var(--gray-100);}
-.old-offer-item .ooi-info{flex:1;}
-.old-offer-item .ooi-title{font-size:13px;font-weight:700;}
-.old-offer-item .ooi-price{font-size:12px;color:var(--gray-500);}
-/* ADMIN OFFER FORM */
-.offer-img-preview{width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:10px;display:none;}
-@media(max-width:380px){
-  .hero h1{font-size:26px;}
-  .form-row{grid-template-columns:1fr;}
-  .detail-amounts{grid-template-columns:1fr;}
-  .stat-grid{grid-template-columns:1fr;}
-}
+.correction-box{background:var(--yellow-light);border:1.5px solid #fcd34d;border-radius:10px;padding:14px;margin-bottom:16px;}
+.cb-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#92400e;margin-bottom:6px;}
+.cb-note{font-size:13px;color:#78350f;line-height:1.6;}
+.history-item{border-left:3px solid var(--gray-200);padding:10px 0 10px 14px;margin-bottom:10px;position:relative;}
+.history-item::before{content:'';position:absolute;left:-6px;top:14px;width:10px;height:10px;border-radius:50%;background:var(--gray-300);}
+.history-item.latest{border-left-color:var(--black);}.history-item.latest::before{background:var(--black);}
+.global-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:14px;}
+.pct-row{display:flex;gap:10px;align-items:center;margin-bottom:14px;}
+.pct-row input{flex:1;border:1.5px solid var(--gray-200);border-radius:8px;padding:12px 14px;font-size:18px;font-weight:700;font-family:var(--font);outline:none;text-align:center;}
+.pct-row input:focus{border-color:var(--black);}
+.pct-sym{font-size:22px;font-weight:800;color:var(--gray-500);}
+.preview-box{background:var(--gray-100);border-radius:8px;padding:14px;margin-bottom:14px;}
+.notif-panel{position:fixed;top:60px;right:16px;width:300px;background:#fff;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.15);z-index:500;max-height:400px;overflow-y:auto;animation:fadeIn .2s ease;}
+.notif-item{padding:12px 16px;border-bottom:1px solid var(--gray-100);cursor:pointer;}
+.notif-item:hover{background:var(--gray-100);}.notif-item.unread{background:#eff6ff;}
+.notif-item-title{font-size:13px;font-weight:700;margin-bottom:2px;}
+.notif-item-body{font-size:12px;color:var(--gray-500);}.notif-item-time{font-size:11px;color:var(--gray-300);margin-top:3px;}
+.order-item{border:1px solid var(--gray-200);border-radius:8px;padding:14px;margin-bottom:10px;background:#fff;cursor:pointer;}
+.order-item:hover{border-color:var(--black);}
+.order-item-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+.order-ref{font-size:11px;font-weight:700;color:var(--gray-500);font-family:monospace;}
+@media(max-width:380px){.hero h1{font-size:26px;}.form-row{grid-template-columns:1fr;}.detail-amounts{grid-template-columns:1fr;}.stat-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
-
 <!-- PUBLIC PAGE -->
 <div id="public-page">
   <nav class="topbar">
     <a href="#" class="topbar-logo" onclick="scrollToTop();handleLogoTap();return false;">
-      <svg viewBox="0 0 28 28" fill="none" style="width:32px;height:32px;">
-        <circle cx="14" cy="14" r="14" fill="white"/>
-        <path d="M8 14C8 10.686 10.686 8 14 8C17.314 8 20 10.686 20 14" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round"/>
-        <path d="M11 11L8 14L5 11" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M10 17H18" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round"/>
-        <path d="M10 20H15" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-      <span style="font-size:20px;font-weight:800;letter-spacing:-0.5px;">Payback</span>
+      <svg viewBox="0 0 28 28" fill="none" style="width:32px;height:32px;"><circle cx="14" cy="14" r="14" fill="white"/><path d="M8 14C8 10.686 10.686 8 14 8C17.314 8 20 10.686 20 14" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round"/><path d="M11 11L8 14L5 11" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 17H18" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round"/><path d="M10 20H15" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round"/></svg>
+      <span style="font-size:20px;">Payback</span>
+      <span class="notif-dot" id="public-notif-dot"></span>
     </a>
   </nav>
   <section class="hero">
@@ -222,7 +199,10 @@ body{font-family:var(--font);background:var(--white);color:var(--black);font-siz
     <p class="hero-bio">A Bangladeshi entrepreneur. Failed not from lack of vision, but from trusting the wrong people and leading with emotion over logic. Now rebuilding — with <em>experience as his greatest asset.</em></p>
     <div class="hero-cta">
       <button onclick="openClaimPage()" class="btn btn-black" style="flex:1;max-width:200px;">Submit a Claim</button>
-      <button onclick="openStatusPage()" class="btn btn-outline" style="flex:1;max-width:200px;">Check Status</button>
+      <div class="status-btn-wrap">
+        <span class="ext-dot" id="status-ext-dot"></span>
+        <button onclick="openStatusPage()" class="btn btn-outline btn-full">Check Status</button>
+      </div>
     </div>
   </section>
   <footer style="background:var(--black);color:rgba(255,255,255,.5);text-align:center;padding:24px 20px;font-size:12px;">
@@ -230,225 +210,276 @@ body{font-family:var(--font);background:var(--white);color:var(--black);font-siz
       <svg viewBox="0 0 20 20" fill="none" width="18" height="18"><circle cx="10" cy="10" r="10" fill="white"/><path d="M6 10C6 7.79 7.79 6 10 6C12.21 6 14 7.79 14 10" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round"/><path d="M8 8L6 10L4 8" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 13H13" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round"/></svg>
       <span style="color:#fff;font-weight:700;">Payback</span>
     </div>
-    © 2025 Anisul Islam Chowdhury · All rights reserved
+    &copy; 2025 Anisul Islam Chowdhury &middot; All rights reserved
   </footer>
 </div>
 
 <!-- STATUS PAGE -->
-<div id="status-page" class="hidden" style="min-height:100vh;background:var(--white);">
-  <div style="background:var(--black);padding:14px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;">
-    <button onclick="closeStatusPage()" style="background:rgba(255,255,255,.1);border:none;color:#fff;width:36px;height:36px;border-radius:8px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;">←</button>
-    <div><div style="font-weight:800;color:#fff;font-size:16px;">Check Status</div><div style="font-size:11px;color:rgba(255,255,255,.5);">আপনার দাবির অবস্থা জানুন</div></div>
+<div id="status-page" class="hidden" style="min-height:100vh;">
+  <div class="page-header">
+    <button class="page-header-back" onclick="closeStatusPage()">&#8592;</button>
+    <div><div class="page-header-title">Check Status</div><div class="page-header-sub">&#2438;&#2474;&#2472;&#2494;&#2480; &#2470;&#2494;&#2476;&#2495;&#2480; &#2437;&#2476;&#2488;&#2509;&#2469;&#2494; &#2460;&#2494;&#2472;&#2497;&#2472;</div></div>
   </div>
   <div id="status-input-view" style="padding:28px 20px;max-width:480px;margin:0 auto;">
     <div style="text-align:center;margin-bottom:28px;">
-      <div style="font-size:40px;margin-bottom:12px;">🔍</div>
+      <div style="font-size:40px;margin-bottom:12px;">&#128269;</div>
       <div style="font-size:18px;font-weight:800;margin-bottom:6px;">Track Your Claim</div>
-      <div style="font-size:13px;color:var(--gray-500);">Enter your mobile number to see your claim status and payment history</div>
+      <div style="font-size:13px;color:var(--gray-500);">Enter your mobile number to view your claim dashboard</div>
     </div>
     <div class="form-group" style="margin-bottom:14px;">
-      <label class="form-label">Mobile Number · মোবাইল নম্বর</label>
+      <label class="form-label">Mobile Number</label>
       <input type="tel" class="form-input" id="sp-mobile" placeholder="01XXXXXXXXX" maxlength="11" style="font-size:18px;text-align:center;letter-spacing:2px;" onkeydown="if(event.key==='Enter')searchStatus()">
     </div>
-    <button class="btn btn-black btn-full" onclick="searchStatus()" style="padding:15px;">Search · খুঁজুন</button>
+    <button class="btn btn-black btn-full" onclick="searchStatus()" style="padding:15px;" id="sp-search-btn">Search &middot; &#2453;&#2497;&#2494;&#2487;&#2497;&#2472;</button>
     <div id="sp-alert" style="margin-top:12px;"></div>
   </div>
-  <div id="status-dashboard-view" class="hidden" style="padding:0 0 40px;max-width:480px;margin:0 auto;">
+  <div id="status-dashboard-view" class="hidden" style="max-width:480px;margin:0 auto;padding-bottom:40px;">
     <div style="padding:12px 20px;border-bottom:1px solid var(--gray-200);">
-      <button onclick="backToSearch()" style="background:none;border:none;font-size:13px;color:var(--gray-500);cursor:pointer;">← Search again</button>
+      <button onclick="backToSearch()" style="background:none;border:none;font-size:13px;color:var(--gray-500);cursor:pointer;">&#8592; Search again</button>
     </div>
     <div id="sp-results-container" style="padding:20px;"></div>
   </div>
 </div>
 
 <!-- CLAIM PAGE -->
-<div id="claim-page" class="hidden" style="min-height:100vh;background:var(--white);">
-  <div style="background:var(--black);padding:14px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;">
-    <button onclick="closeClaimPage()" style="background:rgba(255,255,255,.1);border:none;color:#fff;width:36px;height:36px;border-radius:8px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;">←</button>
-    <div><div style="font-weight:800;color:#fff;font-size:16px;">Submit a Claim</div><div style="font-size:11px;color:rgba(255,255,255,.5);">বিনিয়োগ ফেরত দাবি করুন</div></div>
+<div id="claim-page" class="hidden" style="min-height:100vh;">
+  <div class="page-header">
+    <button class="page-header-back" onclick="closeClaimPage()">&#8592;</button>
+    <div><div class="page-header-title">Submit a Claim</div><div class="page-header-sub">&#2476;&#2495;&#2472;&#2495;&#2479;&#2492;&#2507;&#2455; &#2YourFontBack &#2470;&#2494;&#2476;&#2495; &#2453;&#2480;&#2497;&#2472;</div></div>
   </div>
   <div style="padding:24px 20px 50px;max-width:480px;margin:0 auto;">
     <div id="claim-alert"></div>
     <div id="claim-success-view" class="hidden" style="text-align:center;padding:40px 20px;">
-      <div style="font-size:56px;margin-bottom:16px;">✅</div>
+      <div style="font-size:56px;margin-bottom:16px;">&#9989;</div>
       <div style="font-size:20px;font-weight:800;margin-bottom:8px;">Claim Submitted!</div>
-      <div style="font-size:14px;color:var(--gray-500);margin-bottom:28px;">আপনার দাবি সফলভাবে জমা হয়েছে। আমরা শীঘ্রই যোগাযোগ করব।</div>
-      <button onclick="closeClaimPage()" class="btn btn-black btn-full">← Back to Home</button>
+      <div style="font-size:14px;color:var(--gray-500);margin-bottom:28px;">&#2438;&#2474;&#2472;&#2494;&#2480; &#2470;&#2494;&#2476;&#2495; &#2488;&#2YourFontBack&#2476;&#2472;&#2509;&#2453;&#2499;&#2474;&#2492;&#2503;&#2470;&#2495;&#2503; &#2460;&#2478;&#2494; &#2489;&#2479;&#2492;&#2503;&#2459;&#2503;&#964;</div>
+      <button onclick="closeClaimPage()" class="btn btn-black btn-full">&#8592; Back to Home</button>
     </div>
     <div id="claim-form-view">
-      <div class="form-group"><label class="form-label">Full Name <span class="bn">· পূর্ণ নাম</span> <span class="req">*</span></label><input type="text" class="form-input" id="f-name" placeholder="Your full name · আপনার পূর্ণ নাম"></div>
-      <div class="form-group"><label class="form-label">Company / Where Invested <span class="bn">· কোম্পানির নাম</span> <span class="req">*</span></label><input type="text" class="form-input" id="f-company" placeholder="Company or business name"></div>
+      <div class="form-group"><label class="form-label">Full Name <span class="req">*</span></label><input type="text" class="form-input" id="f-name" placeholder="Your full name"></div>
+      <div class="form-group"><label class="form-label">Company / Where Invested <span class="req">*</span></label><input type="text" class="form-input" id="f-company" placeholder="Company or business name"></div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Invested Amount <span class="bn">· বিনিয়োগ</span> <span class="req">*</span></label><input type="number" class="form-input" id="f-invested" placeholder="৳ 0" min="0" oninput="calcDue()"></div>
-        <div class="form-group"><label class="form-label">Already Received <span class="bn">· পেয়েছেন</span></label><input type="number" class="form-input" id="f-received" placeholder="৳ 0" min="0" value="0" oninput="calcDue()"></div>
+        <div class="form-group"><label class="form-label">Invested Amount <span class="req">*</span></label><input type="number" class="form-input" id="f-invested" placeholder="0" min="0" oninput="calcDue()"></div>
+        <div class="form-group"><label class="form-label">Already Received</label><input type="number" class="form-input" id="f-received" placeholder="0" min="0" value="0" oninput="calcDue()"></div>
       </div>
-      <div class="form-group"><label class="form-label">Due Amount <span class="bn">· বাকি পাওনা</span></label><div class="due-display"><span class="due-label">Auto-calculated · স্বয়ংক্রিয় হিসাব</span><span id="f-due-display">৳ 0</span></div></div>
-      <div class="form-group"><label class="form-label">Mobile Number <span class="bn">· মোবাইল</span> <span class="req">*</span></label><input type="tel" class="form-input" id="f-mobile" placeholder="01XXXXXXXXX" maxlength="11"><p class="form-hint">Bangladesh number · বাংলাদেশি নম্বর</p></div>
-      <div class="form-group"><label class="form-label">Email <span class="bn">· ইমেইল</span> <span style="font-size:11px;color:var(--gray-500);font-weight:400;">(Optional)</span></label><input type="email" class="form-input" id="f-email" placeholder="you@example.com"></div>
-      <div class="form-group"><label class="form-label">Nagad / bKash Number <span class="bn">· নগদ / বিকাশ</span> <span class="req">*</span></label><input type="tel" class="form-input" id="f-bkash" placeholder="01XXXXXXXXX"><p class="form-hint">Payment will be sent here · এই নম্বরে পেমেন্ট পাঠানো হবে</p></div>
-      <div class="form-group"><label class="form-label">Bank Details <span class="bn">· ব্যাংক তথ্য</span> <span style="font-size:11px;color:var(--gray-500);font-weight:400;">(Optional)</span></label><textarea class="form-input" id="f-bank" rows="3" placeholder="Bank name, Account number, Branch · ব্যাংকের নাম, অ্যাকাউন্ট নম্বর, শাখা"></textarea></div>
+      <div class="form-group"><label class="form-label">Due Amount (Auto)</label><div class="due-display"><span class="due-label">Auto-calculated</span><span id="f-due-display">&#2547; 0</span></div></div>
+      <div class="form-group"><label class="form-label">Mobile Number <span class="req">*</span></label><input type="tel" class="form-input" id="f-mobile" placeholder="01XXXXXXXXX" maxlength="11"><p class="form-hint">Bangladesh number</p></div>
+      <div class="form-group"><label class="form-label">Email (Optional)</label><input type="email" class="form-input" id="f-email" placeholder="you@example.com"></div>
+      <div class="form-group"><label class="form-label">Nagad / bKash Number <span class="req">*</span></label><input type="tel" class="form-input" id="f-bkash" placeholder="01XXXXXXXXX"><p class="form-hint">Payment will be sent here</p></div>
+      <div class="form-group"><label class="form-label">Bank Details (Optional)</label><textarea class="form-input" id="f-bank" rows="3" placeholder="Bank name, Account number, Branch"></textarea></div>
       <div class="terms-row">
         <input type="checkbox" id="f-terms" onchange="toggleSubmit()">
-        <label for="f-terms">I have read and agree to the <a href="#" onclick="openTerms();return false;">Terms & Policy</a> · আমি <a href="#" onclick="openTerms();return false;">শর্তাবলী</a> পড়েছি এবং সম্মত আছি</label>
+        <label for="f-terms">I have read and agree to the <a href="#" onclick="openTerms();return false;">Terms &amp; Policy</a></label>
       </div>
-      <button class="btn btn-black btn-full" id="submit-btn" onclick="submitClaim()" disabled style="padding:16px;font-size:16px;">Complete · সম্পন্ন করুন</button>
+      <button class="btn btn-black btn-full" id="submit-btn" onclick="submitClaim()" disabled style="padding:16px;font-size:16px;">Complete &middot; &#2488;&#2478;&#2509;&#2474;&#2472;&#2509;&#2472; &#2453;&#2480;&#2497;&#2472;</button>
     </div>
   </div>
 </div>
 
+<!-- EDIT CLAIM PAGE -->
+<div id="edit-claim-page" class="hidden" style="min-height:100vh;">
+  <div class="page-header">
+    <button class="page-header-back" onclick="closeEditClaimPage()">&#8592;</button>
+    <div><div class="page-header-title">Edit &amp; Resubmit</div><div class="page-header-sub">&#2468;&#2469;&#2509;&#2479; &#2488;&#2A488;&#2av&#2the87;&#2শোধন করুন</div></div>
+  </div>
+  <div style="padding:24px 20px 50px;max-width:480px;margin:0 auto;">
+    <div id="edit-correction-note"></div>
+    <div id="edit-alert"></div>
+    <div class="form-group"><label class="form-label">Full Name (Locked)</label><input type="text" class="form-input" id="ef-name" disabled></div>
+    <div class="form-group"><label class="form-label">Mobile (Locked)</label><input type="text" class="form-input" id="ef-mobile" disabled></div>
+    <div class="form-group"><label class="form-label">Company <span class="req">*</span></label><input type="text" class="form-input" id="ef-company"></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Invested <span class="req">*</span></label><input type="number" class="form-input" id="ef-invested" min="0" oninput="calcEditDue()"></div>
+      <div class="form-group"><label class="form-label">Received</label><input type="number" class="form-input" id="ef-received" min="0" oninput="calcEditDue()"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Due Amount (Auto)</label><div class="due-display"><span class="due-label">Auto-calculated</span><span id="ef-due-display">&#2547; 0</span></div></div>
+    <div class="form-group"><label class="form-label">Email (Optional)</label><input type="email" class="form-input" id="ef-email"></div>
+    <div class="form-group"><label class="form-label">Nagad / bKash <span class="req">*</span></label><input type="tel" class="form-input" id="ef-bkash" maxlength="11"></div>
+    <div class="form-group"><label class="form-label">Bank Details (Optional)</label><textarea class="form-input" id="ef-bank" rows="3"></textarea></div>
+    <button class="btn btn-black btn-full" onclick="resubmitClaim()" style="padding:16px;" id="resubmit-btn">Resubmit Claim</button>
+  </div>
+</div>
+
 <!-- ALL OFFERS PAGE -->
-<div id="all-offers-page" class="hidden" style="min-height:100vh;background:var(--white);">
-  <div style="background:var(--black);padding:14px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;">
-    <button onclick="closeAllOffersPage()" style="background:rgba(255,255,255,.1);border:none;color:#fff;width:36px;height:36px;border-radius:8px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;">←</button>
-    <div><div style="font-weight:800;color:#fff;font-size:16px;">All Offers</div><div style="font-size:11px;color:rgba(255,255,255,.5);">সকল অফার দেখুন</div></div>
+<div id="all-offers-page" class="hidden" style="min-height:100vh;">
+  <div class="page-header">
+    <button class="page-header-back" onclick="closeAllOffersPage()">&#8592;</button>
+    <div><div class="page-header-title">All Offers</div><div class="page-header-sub">&#2488;&#2453;&#2482; &#2437;&#2475;&#2494;&#2480;</div></div>
   </div>
   <div style="padding:20px;max-width:480px;margin:0 auto;" id="all-offers-list"></div>
+</div>
+
+<!-- ORDER ADDRESS MODAL -->
+<div id="order-modal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <div class="modal-handle"></div>
+    <div class="modal-header"><h3>&#128230; Delivery Address</h3><button class="modal-close" onclick="closeOrderModal()">&#10005;</button></div>
+    <div class="modal-body">
+      <div id="order-alert"></div>
+      <div id="order-offer-summary" style="background:var(--gray-100);border-radius:8px;padding:12px;margin-bottom:16px;font-size:13px;"></div>
+      <div class="form-group"><label class="form-label">House / Road / Block <span class="req">*</span></label><input type="text" class="form-input" id="od-house" placeholder="House no, Road, Block"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Thana <span class="req">*</span></label><input type="text" class="form-input" id="od-thana" placeholder="Thana"></div>
+        <div class="form-group"><label class="form-label">District <span class="req">*</span></label><input type="text" class="form-input" id="od-district" placeholder="District"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Delivery Mobile <span class="req">*</span></label><input type="tel" class="form-input" id="od-mobile" maxlength="11"></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-black btn-full" onclick="confirmOrder()" id="confirm-order-btn">Confirm Order</button></div>
+  </div>
 </div>
 
 <!-- TERMS MODAL -->
 <div id="terms-modal" class="modal-overlay hidden">
   <div class="modal-box">
     <div class="modal-handle"></div>
-    <div class="modal-header"><h3>Terms & Policy · শর্তাবলী</h3><button class="modal-close" onclick="closeTerms()">✕</button></div>
+    <div class="modal-header"><h3>Terms &amp; Policy</h3><button class="modal-close" onclick="closeTerms()">&#10005;</button></div>
     <div class="modal-body">
       <p><strong>Last Updated: June 2025</strong></p>
-      <h4>1. Purpose of This Portal</h4>
-      <p>This portal ("Payback") is a voluntary repayment initiative by Anisul Islam Chowdhury to track and process return claims from individuals who have previously invested with him or his associated businesses. This is not a legally mandated process.</p>
+      <h4>1. Purpose</h4><p>This portal is a voluntary repayment initiative by Anisul Islam Chowdhury. This is not a legally mandated process.</p>
       <h4>2. No Legal Filing Acknowledgment</h4>
-      <p style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:12px;color:#c2410c;font-weight:500;">By submitting a claim, you acknowledge and confirm that you have <strong>NOT filed any legal case or complaint</strong> in any court, tribunal, or law enforcement authority against Anisul Islam Chowdhury or any of his associated businesses in relation to your investment. If any legal action is filed or is already pending, this repayment process shall be suspended for your claim until the matter is resolved.</p>
-      <h4>3. Voluntary Process</h4>
-      <p>This repayment is made in good faith on a voluntary basis. It is not an admission of any legal liability. Payments will be made in installments at a percentage determined by the portal administrator based on available capacity.</p>
-      <h4>4. Claim Verification</h4>
-      <p>All submitted claims are subject to verification. Anisul Islam Chowdhury reserves the right to approve, reject, or request additional information for any claim. False or fraudulent claims will be permanently rejected.</p>
-      <h4>5. Payment Method</h4>
-      <p>Payments will be made via the mobile banking number (Nagad/bKash) or bank account provided by the claimant. It is the claimant's responsibility to ensure the accuracy of payment details.</p>
-      <h4>6. No Guarantee of Timeline</h4>
-      <p>While every effort will be made to process payments as quickly as possible, no specific timeline is guaranteed. Payment schedules depend on available financial capacity.</p>
-      <h4>7. Privacy</h4>
-      <p>Your submitted information will be used solely for processing your claim and will not be shared with third parties without your consent.</p>
-      <h4>8. Acceptance</h4>
-      <p>By checking the agreement box and submitting your claim, you confirm that you have read, understood, and agreed to all of the above terms.</p>
-      <p style="margin-top:16px;"><strong>বাংলা সারসংক্ষেপ:</strong> এই পোর্টালে দাবি জমা দিয়ে আপনি নিশ্চিত করছেন যে আপনি কোনো আদালত বা আইন প্রয়োগকারী সংস্থায় কোনো মামলা দায়ের করেননি। এই প্রক্রিয়াটি স্বেচ্ছামূলক এবং সরল বিশ্বাসে পরিচালিত হচ্ছে।</p>
+      <p style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:12px;color:#c2410c;font-weight:500;">By submitting a claim, you confirm that you have <strong>NOT filed any legal case or complaint</strong> in any court or law enforcement authority. If any legal action is pending, this process shall be suspended for your claim.</p>
+      <h4>3. Voluntary Process</h4><p>This repayment is made in good faith. It is not an admission of any legal liability.</p>
+      <h4>4. Claim Verification</h4><p>All claims are subject to verification. False claims will be permanently rejected.</p>
+      <h4>5. Privacy</h4><p>Your information will be used solely for processing your claim.</p>
     </div>
-    <div class="modal-footer"><button class="btn btn-black btn-full" onclick="agreeTerms()">I Agree · সম্মত আছি</button></div>
+    <div class="modal-footer"><button class="btn btn-black btn-full" onclick="agreeTerms()">I Agree</button></div>
   </div>
 </div>
 
 <!-- ADMIN LOGIN -->
 <div id="admin-login-page" class="hidden">
   <div class="login-card">
-    <div class="login-logo">
-      <svg viewBox="0 0 32 32" fill="none" width="32" height="32"><circle cx="16" cy="16" r="16" fill="#0a0a0a"/><path d="M9 16C9 12.134 12.134 9 16 9C19.866 9 23 12.134 23 16" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M12 12.5L9 16L6 12.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 20H21" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M11 23H17" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+    <div style="display:flex;align-items:center;gap:10px;font-size:20px;font-weight:800;margin-bottom:28px;">
+      <svg viewBox="0 0 32 32" fill="none" width="32" height="32"><circle cx="16" cy="16" r="16" fill="#0a0a0a"/><path d="M9 16C9 12.134 12.134 9 16 9C19.866 9 23 12.134 23 16" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M12 12.5L9 16L6 12.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 20H21" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
       Payback Admin
     </div>
-    <h2>Sign In</h2>
-    <p style="font-size:13px;color:var(--gray-500);margin-bottom:24px;">Admin access only · শুধুমাত্র অ্যাডমিনের জন্য</p>
+    <h2 style="font-size:22px;font-weight:800;margin-bottom:6px;">Sign In</h2>
+    <p style="font-size:13px;color:var(--gray-500);margin-bottom:24px;">Admin access only</p>
     <div id="login-alert"></div>
-    <div class="form-group"><label class="form-label">Username</label><input type="text" class="form-input" id="l-user" placeholder="Username" autocomplete="username"></div>
-    <div class="form-group" style="margin-bottom:20px;"><label class="form-label">Password</label><input type="password" class="form-input" id="l-pass" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <div class="form-group"><label class="form-label">Username</label><input type="text" class="form-input" id="l-user" autocomplete="username"></div>
+    <div class="form-group" style="margin-bottom:20px;"><label class="form-label">Password</label><input type="password" class="form-input" id="l-pass" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <button class="btn btn-black btn-full" onclick="doLogin()">Sign In</button>
-    <div style="text-align:center;margin-top:16px;"><button onclick="hidePage('admin-login-page');showPage('public-page')" style="background:none;border:none;color:var(--gray-500);font-size:13px;cursor:pointer;">← Back to site</button></div>
+    <div style="text-align:center;margin-top:16px;"><button onclick="hidePage('admin-login-page');showPage('public-page')" style="background:none;border:none;color:var(--gray-500);font-size:13px;cursor:pointer;">&#8592; Back to site</button></div>
   </div>
 </div>
 
 <!-- ADMIN DASHBOARD -->
 <div id="admin-page" class="hidden">
   <div class="admin-topbar">
-    <div class="brand">
+    <div class="admin-brand">
       <svg viewBox="0 0 20 20" fill="none" width="20" height="20"><circle cx="10" cy="10" r="10" fill="white"/><path d="M6 10C6 7.79 7.79 6 10 6C12.21 6 14 7.79 14 10" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round"/><path d="M8 8L6 10L4 8" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 13H13" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round"/></svg>
       Payback <span>Admin</span>
     </div>
-    <button onclick="adminLogout()" style="background:rgba(255,255,255,.1);border:none;color:#fff;padding:7px 14px;border-radius:6px;font-size:12px;cursor:pointer;font-family:var(--font);">Logout</button>
+    <div class="admin-right">
+      <button class="bell-btn" onclick="toggleNotifPanel()">&#128276;<span class="bell-badge" id="bell-badge">0</span></button>
+      <button onclick="adminLogout()" style="background:rgba(255,255,255,.1);border:none;color:#fff;padding:7px 14px;border-radius:6px;font-size:12px;cursor:pointer;font-family:var(--font);">Logout</button>
+    </div>
   </div>
-  <div style="background:var(--black);padding:0 16px;">
+  <div id="notif-panel" class="hidden">
+    <div class="notif-panel">
+      <div style="padding:14px 16px;border-bottom:1px solid var(--gray-200);display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-weight:700;font-size:14px;">Notifications</span>
+        <button onclick="markAllRead()" style="background:none;border:none;font-size:12px;color:var(--blue);cursor:pointer;">Mark all read</button>
+      </div>
+      <div id="notif-list"><div class="no-data" style="padding:20px;">No notifications</div></div>
+    </div>
+  </div>
+  <div style="background:var(--black);">
     <div class="admin-nav" style="max-width:700px;margin:0 auto;">
-      <button class="active" onclick="adminTab('overview',this)">📊 Overview</button>
-      <button onclick="adminTab('claims',this)">📋 Claims</button>
-      <button onclick="adminTab('distribute',this)">💸 Distribute</button>
-      <button onclick="adminTab('offers',this)">🎁 Offers</button>
+      <button class="active" onclick="adminTab('overview',this)">&#128202; Overview</button>
+      <button onclick="adminTab('claims',this)">&#128203; Claims</button>
+      <button onclick="adminTab('distribute',this)">&#128176; Distribute</button>
+      <button onclick="adminTab('orders',this)">&#128230; Orders</button>
+      <button onclick="adminTab('offers',this)">&#127873; Offers</button>
+      <button onclick="adminTab('settings',this)">&#9881;&#65039; Settings</button>
     </div>
   </div>
   <div class="admin-body">
-
-    <!-- OVERVIEW TAB -->
     <div id="tab-overview">
       <div class="stat-grid" style="margin-top:14px;">
         <div class="stat-card"><div class="s-label">Total Claims</div><div class="s-num" id="a-total">0</div></div>
-        <div class="stat-card"><div class="s-label">Pending Review</div><div class="s-num" id="a-pending">0</div></div>
-        <div class="stat-card"><div class="s-label">Total Invested</div><div class="s-num" id="a-invested">৳0</div></div>
-        <div class="stat-card"><div class="s-label">Total Paid</div><div class="s-num green" id="a-paid">৳0</div></div>
+        <div class="stat-card"><div class="s-label">Pending</div><div class="s-num" id="a-pending">0</div></div>
+        <div class="stat-card"><div class="s-label">Total Invested</div><div class="s-num" id="a-invested">&#2547;0</div></div>
+        <div class="stat-card"><div class="s-label">Total Paid</div><div class="s-num green" id="a-paid">&#2547;0</div></div>
       </div>
-      <div class="stat-card" style="margin-bottom:14px;"><div class="s-label">Total Due Remaining</div><div class="s-num orange" id="a-due">৳0</div></div>
-      <div class="admin-card">
-        <div class="admin-card-header">Recent Claims</div>
-        <div class="admin-card-body" id="recent-claims-list"><div class="no-data">No claims yet</div></div>
-      </div>
+      <div class="stat-card" style="margin-bottom:14px;"><div class="s-label">Total Due Remaining</div><div class="s-num orange" id="a-due">&#2547;0</div></div>
+      <div class="admin-card"><div class="admin-card-header">Recent Claims</div><div class="admin-card-body" id="recent-claims-list"><div class="no-data">No claims yet</div></div></div>
     </div>
-
-    <!-- CLAIMS TAB -->
     <div id="tab-claims" class="hidden">
       <div style="margin-top:14px;" class="admin-card">
         <div class="admin-card-header">All Claims</div>
         <div class="admin-card-body">
           <div class="search-row">
-            <input type="text" class="search-input" id="search-input" placeholder="Search name, mobile, company…" oninput="renderClaimsList()">
+            <input type="text" class="search-input" id="search-input" placeholder="Search name, mobile, company&#8230;" oninput="renderClaimsList()">
             <select class="filter-select" id="filter-status" onchange="renderClaimsList()">
-              <option value="">All Status</option>
-              <option value="pending">Pending</option>
-              <option value="approved">Approved</option>
-              <option value="paid">Paid</option>
-              <option value="rejected">Rejected</option>
+              <option value="">All Status</option><option value="pending">Pending</option><option value="approved">Approved</option>
+              <option value="correction">Correction</option><option value="paid">Paid</option><option value="rejected">Rejected</option>
             </select>
           </div>
           <div id="claims-list"></div>
         </div>
       </div>
     </div>
-
-    <!-- DISTRIBUTE TAB -->
     <div id="tab-distribute" class="hidden">
       <div style="margin-top:14px;">
-        <div class="global-pay-card">
-          <h3>💸 Global Payment Distribution</h3>
-          <p style="font-size:13px;color:var(--gray-500);margin-bottom:14px;">Apply a single percentage to ALL approved claims at once</p>
-          <div class="pct-input-row">
-            <input type="number" id="global-pct" placeholder="10" min="1" max="100" oninput="updateGlobalPreview()">
-            <span class="pct-sym">%</span>
-          </div>
-          <div class="global-preview" id="global-preview"><p>Enter a percentage to preview</p></div>
-          <button class="btn btn-green btn-full" onclick="distributeGlobal()">Distribute to All Approved Claims</button>
+        <div class="global-card">
+          <h3 style="font-size:15px;font-weight:800;margin-bottom:14px;">&#128176; Global Distribution</h3>
+          <p style="font-size:13px;color:var(--gray-500);margin-bottom:14px;">Apply a percentage to ALL approved claims</p>
+          <div class="pct-row"><input type="number" id="global-pct" placeholder="10" min="1" max="100" oninput="updateGlobalPreview()"><span class="pct-sym">%</span></div>
+          <div class="preview-box" id="global-preview"><p style="font-size:13px;color:var(--gray-500);">Enter a percentage to preview</p></div>
+          <button class="btn btn-green btn-full" onclick="distributeGlobal()">Distribute to All Approved</button>
         </div>
-        <div class="admin-card">
-          <div class="admin-card-header">Per-Claim Payment</div>
-          <div class="admin-card-body"><p style="font-size:13px;color:var(--gray-500);margin-bottom:12px;">Click any approved claim to make a payment</p><div id="approved-claims-list"></div></div>
+        <div class="admin-card"><div class="admin-card-header">Per-Claim Payment</div><div class="admin-card-body"><div id="approved-claims-list"></div></div></div>
+      </div>
+    </div>
+    <div id="tab-orders" class="hidden">
+      <div style="margin-top:14px;" class="admin-card">
+        <div class="admin-card-header">&#128230; All Orders</div>
+        <div class="admin-card-body">
+          <div class="search-row">
+            <input type="text" class="search-input" id="order-search" placeholder="Search ref, offer, mobile&#8230;" oninput="renderOrdersList()">
+            <select class="filter-select" id="order-filter-status" onchange="renderOrdersList()">
+              <option value="">All</option><option value="pending">Pending</option><option value="confirmed">Confirmed</option>
+              <option value="shipped">Shipped</option><option value="delivered">Delivered</option><option value="cancelled">Cancelled</option>
+            </select>
+            <input type="date" class="filter-select" id="order-filter-date" onchange="renderOrdersList()" style="font-size:12px;">
+          </div>
+          <div id="orders-list"></div>
         </div>
       </div>
     </div>
-
-    <!-- OFFERS TAB -->
     <div id="tab-offers" class="hidden">
-      <div style="margin-top:14px;">
-        <div class="admin-card">
-          <div class="admin-card-header">
-            <span>🎁 Manage Offers</span>
-            <button class="btn btn-black btn-sm" onclick="openOfferForm()">+ New Offer</button>
-          </div>
-          <div class="admin-card-body" id="admin-offers-list"><div class="no-data">No offers yet</div></div>
+      <div style="margin-top:14px;" class="admin-card">
+        <div class="admin-card-header"><span>&#127873; Manage Offers</span><button class="btn btn-black btn-sm" onclick="openOfferForm()">+ New Offer</button></div>
+        <div class="admin-card-body" id="admin-offers-list"><div class="no-data">No offers yet</div></div>
+      </div>
+    </div>
+    <div id="tab-settings" class="hidden">
+      <div style="margin-top:14px;" class="admin-card">
+        <div class="admin-card-header">&#9881;&#65039; Settings</div>
+        <div class="admin-card-body">
+          <div class="form-group"><label class="form-label">Default Delivery Charge (&#2547;)</label><input type="number" class="form-input" id="delivery-charge-input" placeholder="100" min="0"><p class="form-hint">Added to every order automatically</p></div>
+          <button class="btn btn-black" onclick="saveDeliveryCharge()">Save Settings</button>
+          <div id="settings-alert" style="margin-top:12px;"></div>
         </div>
       </div>
     </div>
-
   </div>
 </div>
 
 <!-- CLAIM DETAIL PANEL -->
 <div id="detail-overlay" class="detail-overlay hidden">
   <div class="detail-panel">
-    <div class="detail-panel-header">
-      <h3 id="dp-title">Claim Detail</h3>
-      <button class="modal-close" onclick="closeDetail()">✕</button>
-    </div>
+    <div class="detail-panel-header"><h3 id="dp-title">Claim Detail</h3><button class="modal-close" onclick="closeDetail()">&#10005;</button></div>
     <div class="detail-panel-body" id="dp-body"></div>
+  </div>
+</div>
+
+<!-- ORDER DETAIL PANEL -->
+<div id="order-detail-overlay" class="detail-overlay hidden">
+  <div class="detail-panel">
+    <div class="detail-panel-header"><h3 id="odp-title">Order Detail</h3><button class="modal-close" onclick="closeOrderDetail()">&#10005;</button></div>
+    <div class="detail-panel-body" id="odp-body"></div>
   </div>
 </div>
 
@@ -456,32 +487,17 @@ body{font-family:var(--font);background:var(--white);color:var(--black);font-siz
 <div id="offer-modal" class="modal-overlay hidden">
   <div class="modal-box">
     <div class="modal-handle"></div>
-    <div class="modal-header"><h3 id="offer-modal-title">New Offer</h3><button class="modal-close" onclick="closeOfferModal()">✕</button></div>
+    <div class="modal-header"><h3 id="offer-modal-title">New Offer</h3><button class="modal-close" onclick="closeOfferModal()">&#10005;</button></div>
     <div class="modal-body">
       <div id="offer-form-alert"></div>
-      <div class="form-group">
-        <label class="form-label">Offer Title <span class="req">*</span></label>
-        <input type="text" class="form-input" id="of-title" placeholder="e.g. Premium Honey Box">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Description <span class="req">*</span></label>
-        <textarea class="form-input" id="of-desc" rows="3" placeholder="Describe the product or service…"></textarea>
-      </div>
+      <div class="form-group"><label class="form-label">Title <span class="req">*</span></label><input type="text" class="form-input" id="of-title" placeholder="e.g. Premium Honey Box"></div>
+      <div class="form-group"><label class="form-label">Description <span class="req">*</span></label><textarea class="form-input" id="of-desc" rows="3" placeholder="Describe the product or service&#8230;"></textarea></div>
       <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Price (৳) <span class="req">*</span></label>
-          <input type="number" class="form-input" id="of-price" placeholder="0" min="1">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Expiry Date <span class="req">*</span></label>
-          <input type="date" class="form-input" id="of-expiry">
-        </div>
+        <div class="form-group"><label class="form-label">Price (&#2547;) <span class="req">*</span></label><input type="number" class="form-input" id="of-price" placeholder="0" min="1"></div>
+        <div class="form-group"><label class="form-label">Publish Date <span class="req">*</span></label><input type="date" class="form-input" id="of-publish"></div>
       </div>
-      <div class="form-group">
-        <label class="form-label">Product Image URL <span style="font-size:11px;color:var(--gray-500);font-weight:400;">(Optional)</span></label>
-        <input type="url" class="form-input" id="of-image" placeholder="https://…" oninput="previewOfferImg()">
-        <img id="of-img-preview" class="offer-img-preview" alt="Preview">
-      </div>
+      <div class="form-group"><label class="form-label">Expiry Date <span class="req">*</span></label><input type="date" class="form-input" id="of-expiry"></div>
+      <div class="form-group"><label class="form-label">Image URL (Optional)</label><input type="url" class="form-input" id="of-image" placeholder="https://&#8230;" oninput="previewOfferImg()"><img id="of-img-preview" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-top:8px;display:none;" alt="Preview"></div>
     </div>
     <div class="modal-footer" style="display:flex;gap:10px;">
       <button class="btn btn-outline" onclick="closeOfferModal()" style="flex:1;">Cancel</button>
@@ -491,110 +507,124 @@ body{font-family:var(--font);background:var(--white);color:var(--black);font-siz
 </div>
 
 <script>
-// ═══════════════════════════════════
-// SUPABASE CONFIG
-// ═══════════════════════════════════
-const SUPABASE_URL='https://hcdiugqgyusnebvbzpji.supabase.co';
-const SUPABASE_ANON_KEY='sb_publishable_IbiGbpEtwg4YnfARblk4Vg_b-vFEWpN';
-
+const SURL='https://hcdiugqgyusnebvbzpji.supabase.co';
+const SKEY='sb_publishable_IbiGbpEtwg4YnfARblk4Vg_b-vFEWpN';
 const sb={
-  async query(table,method='GET',body=null,filter=''){
-    const url=`${SUPABASE_URL}/rest/v1/${table}${filter}`;
-    const headers={'apikey':SUPABASE_ANON_KEY,'Authorization':`Bearer ${SUPABASE_ANON_KEY}`,'Content-Type':'application/json','Prefer':'return=representation'};
-    const r=await fetch(url,{method,headers,body:body?JSON.stringify(body):null});
-    const data=await r.json();
-    return{data,error:r.ok?null:data};
+  async q(t,m='GET',b=null,f=''){
+    const r=await fetch(`${SURL}/rest/v1/${t}${f}`,{method:m,headers:{'apikey':SKEY,'Authorization':`Bearer ${SKEY}`,'Content-Type':'application/json','Prefer':'return=representation'},body:b?JSON.stringify(b):null});
+    const d=await r.json();return{data:d,error:r.ok?null:d};
   },
-  select:(table,filter='')=>sb.query(table,'GET',null,filter),
-  insert:(table,body)=>sb.query(table,'POST',body),
-  update:(table,body,filter)=>sb.query(table,'PATCH',body,filter),
-  delete:(table,filter)=>sb.query(table,'DELETE',null,filter),
+  sel:(t,f='')=>sb.q(t,'GET',null,f),
+  ins:(t,b)=>sb.q(t,'POST',b),
+  upd:(t,b,f)=>sb.q(t,'PATCH',b,f),
+  del:(t,f)=>sb.q(t,'DELETE',null,f),
 };
 
-// ═══════════════════════════════════
-// STATE
-// ═══════════════════════════════════
-let allClaims=[];let currentDetailId=null;let adminLoggedIn=false;
-let editingOfferId=null;let currentStatusMobile=null;
+let allClaims=[],allOrders=[],adminLoggedIn=false,currentDetailId=null,currentOrderId=null;
+let pendingOrderOffer=null,pendingOrderMobile=null,editingClaimId=null,editingOfferId=null;
+let deliveryCharge=100,notifPanelOpen=false,currentPayMode='pct';
 
-// ═══════════════════════════════════
-// UTILS
-// ═══════════════════════════════════
 const fmt=n=>'৳'+Number(n||0).toLocaleString('en-BD');
 const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 const fmtDate=d=>d?new Date(d).toLocaleDateString('en-BD',{day:'2-digit',month:'short',year:'numeric'}):'—';
+const fmtDT=d=>d?new Date(d).toLocaleString('en-BD',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
 const isExpired=d=>d&&new Date(d)<new Date();
+const isScheduled=d=>d&&new Date(d)>new Date();
+const genRef=()=>'PB-'+Date.now().toString(36).toUpperCase();
 function showPage(id){document.getElementById(id).classList.remove('hidden');}
 function hidePage(id){document.getElementById(id).classList.add('hidden');}
-function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'});return false;}
+function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'});}
 function showAlert(id,msg,type){const el=document.getElementById(id);if(!el)return;el.innerHTML=`<div class="alert alert-${type}">${msg}</div>`;setTimeout(()=>{el.innerHTML='';},5000);}
 
-// ═══════════════════════════════════
-// ADMIN TAP
-// ═══════════════════════════════════
-let tapCount=0;let tapTimer;
+let tapCount=0,tapTimer;
 function handleLogoTap(){tapCount++;clearTimeout(tapTimer);tapTimer=setTimeout(()=>{tapCount=0;},2000);if(tapCount>=5){tapCount=0;showAdmin();}}
-
-// ═══════════════════════════════════
-// TERMS
-// ═══════════════════════════════════
 function openTerms(){document.getElementById('terms-modal').classList.remove('hidden');}
 function closeTerms(){document.getElementById('terms-modal').classList.add('hidden');}
 function agreeTerms(){document.getElementById('f-terms').checked=true;toggleSubmit();closeTerms();}
 
-// ═══════════════════════════════════
-// CLAIM PAGE
-// ═══════════════════════════════════
 function openClaimPage(){
   hidePage('public-page');showPage('claim-page');
   document.getElementById('claim-form-view').classList.remove('hidden');
   document.getElementById('claim-success-view').classList.add('hidden');
   document.getElementById('claim-alert').innerHTML='';
   ['f-name','f-company','f-invested','f-mobile','f-email','f-bkash','f-bank'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  const rec=document.getElementById('f-received');if(rec)rec.value='0';
+  document.getElementById('f-received').value='0';
   document.getElementById('f-due-display').textContent='৳ 0';
-  const terms=document.getElementById('f-terms');if(terms)terms.checked=false;
-  const btn=document.getElementById('submit-btn');if(btn)btn.disabled=true;
+  document.getElementById('f-terms').checked=false;
+  document.getElementById('submit-btn').disabled=true;
   window.scrollTo(0,0);
 }
 function closeClaimPage(){hidePage('claim-page');showPage('public-page');window.scrollTo(0,0);}
-function calcDue(){const inv=parseFloat(document.getElementById('f-invested').value)||0;const rec=parseFloat(document.getElementById('f-received').value)||0;document.getElementById('f-due-display').textContent=fmt(Math.max(0,inv-rec));}
+function calcDue(){const i=parseFloat(document.getElementById('f-invested').value)||0,r=parseFloat(document.getElementById('f-received').value)||0;document.getElementById('f-due-display').textContent=fmt(Math.max(0,i-r));}
+function calcEditDue(){const i=parseFloat(document.getElementById('ef-invested').value)||0,r=parseFloat(document.getElementById('ef-received').value)||0;document.getElementById('ef-due-display').textContent=fmt(Math.max(0,i-r));}
 function toggleSubmit(){document.getElementById('submit-btn').disabled=!document.getElementById('f-terms').checked;}
 
 async function submitClaim(){
-  const name=document.getElementById('f-name').value.trim();
-  const company=document.getElementById('f-company').value.trim();
-  const invested=parseFloat(document.getElementById('f-invested').value)||0;
-  const received=parseFloat(document.getElementById('f-received').value)||0;
-  const mobile=document.getElementById('f-mobile').value.trim();
-  const email=document.getElementById('f-email').value.trim();
-  const bkash=document.getElementById('f-bkash').value.trim();
-  const bank=document.getElementById('f-bank').value.trim();
+  const name=document.getElementById('f-name').value.trim(),company=document.getElementById('f-company').value.trim();
+  const invested=parseFloat(document.getElementById('f-invested').value)||0,received=parseFloat(document.getElementById('f-received').value)||0;
+  const mobile=document.getElementById('f-mobile').value.trim(),email=document.getElementById('f-email').value.trim();
+  const bkash=document.getElementById('f-bkash').value.trim(),bank=document.getElementById('f-bank').value.trim();
   const due=Math.max(0,invested-received);
-  if(!name){showAlert('claim-alert','Please enter your full name · নাম দিন','error');return;}
-  if(!company){showAlert('claim-alert','Please enter company name · কোম্পানির নাম দিন','error');return;}
-  if(invested<=0){showAlert('claim-alert','Please enter invested amount · বিনিয়োগের পরিমাণ দিন','error');return;}
-  if(!/^01[3-9]\d{8}$/.test(mobile)){showAlert('claim-alert','Invalid mobile number · সঠিক মোবাইল নম্বর দিন','error');return;}
-  if(!/^01[3-9]\d{8}$/.test(bkash)){showAlert('claim-alert','Invalid Nagad/bKash number · সঠিক নগদ/বিকাশ নম্বর দিন','error');return;}
-  const btn=document.getElementById('submit-btn');
-  btn.innerHTML='<span class="spinner"></span> Submitting…';btn.disabled=true;
-  const payload={name,company,mobile,email:email||null,bkash_nagad:bkash,bank_details:bank||null,invested_amount:invested,received_amount:received,due_amount:due,total_paid:0,status:'pending',created_at:new Date().toISOString()};
-  const{error}=await sb.insert('claims',payload);
-  if(error){showAlert('claim-alert','Submission failed. Please try again.','error');btn.innerHTML='Complete · সম্পন্ন করুন';btn.disabled=false;return;}
-  notifyWhatsApp(name,company,mobile,invested,due);
+  if(!name)return showAlert('claim-alert','Please enter your full name','error');
+  if(!company)return showAlert('claim-alert','Please enter company name','error');
+  if(invested<=0)return showAlert('claim-alert','Please enter invested amount','error');
+  if(!/^01[3-9]\d{8}$/.test(mobile))return showAlert('claim-alert','Invalid mobile number','error');
+  if(!/^01[3-9]\d{8}$/.test(bkash))return showAlert('claim-alert','Invalid Nagad/bKash number','error');
+  const btn=document.getElementById('submit-btn');btn.innerHTML='<span class="spinner"></span>';btn.disabled=true;
+  const payload={name,company,mobile,email:email||null,bkash_nagad:bkash,bank_details:bank||null,invested_amount:invested,received_amount:received,due_amount:due,total_paid:0,status:'pending',version:1,created_at:new Date().toISOString()};
+  const{data,error}=await sb.ins('claims',payload);
+  if(error){showAlert('claim-alert','Submission failed. Please try again.','error');btn.innerHTML='Complete';btn.disabled=false;return;}
+  const claimId=Array.isArray(data)?data[0]?.id:data?.id;
+  await sb.ins('claim_history',{...payload,claim_id:claimId});
+  await sb.ins('notifications',{type:'new_claim',title:'New Claim Submitted',body:`${name} submitted a claim for ${fmt(invested)}`,for_admin:true,ref_id:claimId,is_read:false});
   document.getElementById('claim-form-view').classList.add('hidden');
   document.getElementById('claim-success-view').classList.remove('hidden');
   window.scrollTo(0,0);
 }
-function notifyWhatsApp(name,company,mobile,invested,due){
-  const msg=`🔔 *New Payback Claim*\n\n👤 *Name:* ${name}\n🏢 *Company:* ${company}\n📱 *Mobile:* ${mobile}\n💰 *Invested:* ${fmt(invested)}\n🔶 *Due:* ${fmt(due)}\n\n_Submitted on ${new Date().toLocaleString('en-BD')}_`;
-  const w=window.open(`https://wa.me/8801901520888?text=${encodeURIComponent(msg)}`,'_blank');
-  if(w)setTimeout(()=>{try{w.close();}catch(e){}},3000);
+
+async function openEditClaimPage(claimId){
+  editingClaimId=claimId;
+  const{data}=await sb.sel('claims',`?id=eq.${claimId}`);
+  if(!data||!data[0])return;
+  const c=data[0];
+  hidePage('status-page');showPage('edit-claim-page');
+  document.getElementById('ef-name').value=c.name||'';
+  document.getElementById('ef-mobile').value=c.mobile||'';
+  document.getElementById('ef-company').value=c.company||'';
+  document.getElementById('ef-invested').value=c.invested_amount||'';
+  document.getElementById('ef-received').value=c.received_amount||0;
+  document.getElementById('ef-due-display').textContent=fmt(c.due_amount||0);
+  document.getElementById('ef-email').value=c.email||'';
+  document.getElementById('ef-bkash').value=c.bkash_nagad||'';
+  document.getElementById('ef-bank').value=c.bank_details||'';
+  document.getElementById('edit-correction-note').innerHTML=c.correction_note?`<div class="correction-box"><div class="cb-title">⚠️ Admin Note</div><div class="cb-note">${esc(c.correction_note)}</div></div>`:'';
+  document.getElementById('edit-alert').innerHTML='';
+  window.scrollTo(0,0);
+}
+function closeEditClaimPage(){hidePage('edit-claim-page');showPage('status-page');}
+
+async function resubmitClaim(){
+  const company=document.getElementById('ef-company').value.trim();
+  const invested=parseFloat(document.getElementById('ef-invested').value)||0;
+  const received=parseFloat(document.getElementById('ef-received').value)||0;
+  const email=document.getElementById('ef-email').value.trim();
+  const bkash=document.getElementById('ef-bkash').value.trim();
+  const bank=document.getElementById('ef-bank').value.trim();
+  const due=Math.max(0,invested-received);
+  if(!company)return showAlert('edit-alert','Enter company name','error');
+  if(invested<=0)return showAlert('edit-alert','Enter invested amount','error');
+  if(!/^01[3-9]\d{8}$/.test(bkash))return showAlert('edit-alert','Invalid Nagad/bKash number','error');
+  const btn=document.getElementById('resubmit-btn');btn.innerHTML='<span class="spinner"></span>';btn.disabled=true;
+  const{data:cur}=await sb.sel('claims',`?id=eq.${editingClaimId}`);
+  const newVersion=(cur[0]?.version||1)+1;
+  await sb.ins('claim_history',{claim_id:editingClaimId,version:newVersion,name:cur[0].name,company,mobile:cur[0].mobile,invested_amount:invested,received_amount:received,due_amount:due,email:email||null,bkash_nagad:bkash,bank_details:bank||null,status:'pending'});
+  await sb.upd('claims',{company,invested_amount:invested,received_amount:received,due_amount:due,email:email||null,bkash_nagad:bkash,bank_details:bank||null,status:'pending',correction_note:null,version:newVersion},`?id=eq.${editingClaimId}`);
+  await sb.ins('notifications',{type:'claim_resubmit',title:'Claim Resubmitted',body:`${cur[0].name} resubmitted claim (v${newVersion})`,for_admin:true,ref_id:editingClaimId,is_read:false});
+  btn.innerHTML='Resubmit Claim';btn.disabled=false;
+  showAlert('edit-alert','✅ Resubmitted! Admin will review.','success');
+  setTimeout(()=>closeEditClaimPage(),2000);
 }
 
-// ═══════════════════════════════════
-// STATUS PAGE
-// ═══════════════════════════════════
 function openStatusPage(){
   hidePage('public-page');showPage('status-page');
   document.getElementById('status-input-view').classList.remove('hidden');
@@ -608,229 +638,229 @@ function backToSearch(){
   document.getElementById('status-dashboard-view').classList.add('hidden');
   document.getElementById('status-input-view').classList.remove('hidden');
   document.getElementById('sp-mobile').value='';
-  document.getElementById('sp-alert').innerHTML='';
-  currentStatusMobile=null;
 }
 
 async function searchStatus(){
   const mobile=document.getElementById('sp-mobile').value.trim();
-  if(!/^01[3-9]\d{8}$/.test(mobile)){document.getElementById('sp-alert').innerHTML='<div class="alert alert-error">Invalid mobile number · সঠিক নম্বর দিন</div>';return;}
-  const btn=document.querySelector('#status-input-view button');
-  btn.innerHTML='<span class="spinner"></span>';btn.disabled=true;
-  currentStatusMobile=mobile;
-  const{data,error}=await sb.select('claims',`?mobile=eq.${mobile}&order=created_at.desc`);
+  if(!/^01[3-9]\d{8}$/.test(mobile)){document.getElementById('sp-alert').innerHTML='<div class="alert alert-error">Invalid mobile number</div>';return;}
+  const btn=document.getElementById('sp-search-btn');btn.innerHTML='<span class="spinner"></span>';btn.disabled=true;
+  try{await sb.ins('last_seen',{mobile,last_seen_at:new Date().toISOString()});}catch(e){}
+  try{await sb.upd('last_seen',{last_seen_at:new Date().toISOString()},`?mobile=eq.${mobile}`);}catch(e){}
+  await sb.upd('notifications',{is_read:true},`?for_mobile=eq.${mobile}&is_read=eq.false`);
+  const{data,error}=await sb.sel('claims',`?mobile=eq.${mobile}&order=created_at.desc`);
   btn.innerHTML='Search · খুঁজুন';btn.disabled=false;
-  if(error||!data||data.length===0){document.getElementById('sp-alert').innerHTML='<div class="alert alert-info">No claims found for this number · এই নম্বরে কোনো দাবি পাওয়া যায়নি</div>';return;}
+  if(error||!data||!data.length){document.getElementById('sp-alert').innerHTML='<div class="alert alert-info">No claims found for this number</div>';return;}
   await renderStatusDashboard(data,mobile);
+  document.getElementById('status-ext-dot').classList.remove('show');
+  document.getElementById('public-notif-dot').classList.remove('show');
 }
 
 async function renderStatusDashboard(claims,mobile){
-  // Load active offers
-  const{data:offers}=await sb.select('offers','?order=created_at.desc');
-  const activeOffers=(offers||[]).filter(o=>!isExpired(o.expiry_date));
+  const{data:offers}=await sb.sel('offers','?order=publish_date.asc');
+  const activeOffers=(offers||[]).filter(o=>!isExpired(o.expiry_date)&&!isScheduled(o.publish_date));
   const oldOffers=(offers||[]).filter(o=>isExpired(o.expiry_date));
-
-  let html=`<div style="font-size:12px;color:var(--gray-500);margin-bottom:16px;">${claims.length} claim(s) found for <strong>${mobile}</strong></div>`;
-
-  // OFFER CARD (active offer on top)
-  if(activeOffers.length>0){
-    const offer=activeOffers[0];
+  let myOrders=[];
+  for(const c of claims){const{data:od}=await sb.sel('orders',`?claim_id=eq.${c.id}&status=neq.cancelled`);if(od)myOrders=[...myOrders,...od];}
+  const orderedOfferIds=new Set(myOrders.map(o=>o.offer_id));
+  let html=`<div style="font-size:12px;color:var(--gray-500);margin-bottom:16px;">${claims.length} claim(s) &middot; <strong>${mobile}</strong></div>`;
+  activeOffers.forEach(offer=>{
+    const total=Number(offer.price)+deliveryCharge;
+    const ordered=orderedOfferIds.has(offer.id);
     html+=`<div class="offer-card">
-      ${offer.image_url?`<img src="${esc(offer.image_url)}" class="offer-card-img" alt="${esc(offer.title)}" onerror="this.style.display='none'">`:`<div class="offer-card-img-placeholder">🎁</div>`}
+      ${offer.image_url?`<img src="${esc(offer.image_url)}" class="offer-card-img" onerror="this.style.display=\'none\'">`:`<div class="offer-card-img-placeholder">🎁</div>`}
       <div class="offer-card-body">
-        <div class="offer-card-tag">⚡ Special Offer · বিশেষ অফার</div>
-        <div class="offer-card-title">${esc(offer.title)}</div>
-        <div class="offer-card-desc">${esc(offer.description)}</div>
-        <div class="offer-card-footer">
+        <div class="offer-tag">⚡ Special Offer</div>
+        <div class="offer-title">${esc(offer.title)}</div>
+        <div class="offer-desc">${esc(offer.description)}</div>
+        <div class="offer-footer">
           <div>
-            <div class="offer-price"><span class="currency">৳</span>${Number(offer.price).toLocaleString('en-BD')}</div>
+            <div class="offer-price"><span class="cur">৳</span>${Number(offer.price).toLocaleString('en-BD')}</div>
+            <div class="offer-total">+৳${deliveryCharge} delivery = <strong>${fmt(total)}</strong> from due</div>
             <div class="offer-expiry">Expires: ${fmtDate(offer.expiry_date)}</div>
           </div>
-          <button class="btn btn-black" onclick="orderOffer('${offer.id}','${mobile}',${offer.price},'${esc(offer.title).replace(/'/g,"\\'")}')">Order with Due →</button>
+          ${ordered?`<div class="ordered-badge">✅ Ordered</div>`:`<button class="btn btn-black btn-sm" onclick="openOrderModal('${offer.id}','${mobile}',${offer.price},'${esc(offer.title).replace(/'/g,"\\'").replace(/"/g,"&quot;")}')">Order →</button>`}
         </div>
       </div>
     </div>`;
-  }
-
-  // VIEW ALL OFFERS button (if old offers exist)
-  if(oldOffers.length>0){
-    html+=`<button class="view-all-btn" onclick="openAllOffersPage()">View All Offers (${oldOffers.length} past) →</button>`;
-  }
-
-  // CLAIM CARDS
+  });
+  if(oldOffers.length>0)html+=`<button class="view-all-btn" onclick="openAllOffersPage()">View All Past Offers (${oldOffers.length}) →</button>`;
   for(const claim of claims){
-    const{data:payments}=await sb.select('payments',`?claim_id=eq.${claim.id}&order=paid_at.desc`);
+    const{data:payments}=await sb.sel('payments',`?claim_id=eq.${claim.id}&order=paid_at.desc`);
     const pList=payments||[];
-    const remainingDue=Math.max(0,Number(claim.due_amount||0)-Number(claim.total_paid||0));
-    const progress=claim.due_amount>0?Math.min(100,(Number(claim.total_paid||0)/Number(claim.due_amount||0))*100):0;
-    html+=`
-    <div style="border:1px solid var(--gray-200);border-radius:12px;overflow:hidden;margin-bottom:20px;">
+    const rd=Math.max(0,Number(claim.due_amount||0)-Number(claim.total_paid||0));
+    const prog=claim.due_amount>0?Math.min(100,(Number(claim.total_paid||0)/Number(claim.due_amount||0))*100):0;
+    const isCor=claim.status==='correction';
+    html+=`<div style="border:1px solid ${isCor?'#fcd34d':'var(--gray-200)'};border-radius:12px;overflow:hidden;margin-bottom:20px;">
       <div style="background:var(--black);padding:16px 18px;display:flex;justify-content:space-between;align-items:center;">
-        <div><div style="color:#fff;font-weight:800;font-size:15px;">${esc(claim.company)}</div><div style="color:rgba(255,255,255,.5);font-size:11px;margin-top:2px;">Submitted ${fmtDate(claim.created_at)}</div></div>
-        <span class="badge badge-${claim.status}">${claim.status.charAt(0).toUpperCase()+claim.status.slice(1)}</span>
+        <div><div style="color:#fff;font-weight:800;font-size:15px;">${esc(claim.company)}</div><div style="color:rgba(255,255,255,.5);font-size:11px;margin-top:2px;">Submitted ${fmtDate(claim.created_at)} &middot; v${claim.version||1}</div></div>
+        <span class="badge badge-${isCor?'correction':claim.status}">${isCor?'⚠️ Correction Needed':claim.status.charAt(0).toUpperCase()+claim.status.slice(1)}</span>
       </div>
+      ${isCor&&claim.correction_note?`<div style="padding:14px 18px 0;"><div class="correction-box"><div class="cb-title">⚠️ Admin Note</div><div class="cb-note">${esc(claim.correction_note)}</div><button class="btn btn-yellow btn-sm" style="margin-top:10px;width:100%;" onclick="openEditClaimPage('${claim.id}')">✏️ Edit &amp; Resubmit</button></div></div>`:''}
       <div style="padding:14px 18px 0;font-size:13px;color:var(--gray-500);">👤 ${esc(claim.name)}</div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--gray-200);margin:14px 18px;border-radius:8px;overflow:hidden;">
         <div style="background:#fff;padding:12px 8px;text-align:center;"><div style="font-size:15px;font-weight:800;">${fmt(claim.invested_amount)}</div><div style="font-size:10px;color:var(--gray-500);font-weight:600;text-transform:uppercase;margin-top:2px;">Invested</div></div>
         <div style="background:#fff;padding:12px 8px;text-align:center;"><div style="font-size:15px;font-weight:800;color:var(--green);">${fmt(claim.total_paid)}</div><div style="font-size:10px;color:var(--gray-500);font-weight:600;text-transform:uppercase;margin-top:2px;">Paid</div></div>
-        <div style="background:#fff;padding:12px 8px;text-align:center;"><div style="font-size:15px;font-weight:800;color:var(--orange);">${fmt(remainingDue)}</div><div style="font-size:10px;color:var(--gray-500);font-weight:600;text-transform:uppercase;margin-top:2px;">Due</div></div>
+        <div style="background:#fff;padding:12px 8px;text-align:center;"><div style="font-size:15px;font-weight:800;color:var(--orange);">${fmt(rd)}</div><div style="font-size:10px;color:var(--gray-500);font-weight:600;text-transform:uppercase;margin-top:2px;">Due</div></div>
       </div>
       <div style="padding:0 18px 14px;">
-        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--gray-500);margin-bottom:6px;"><span>Payment Progress</span><span>${progress.toFixed(0)}%</span></div>
-        <div style="background:var(--gray-200);border-radius:4px;height:6px;overflow:hidden;"><div style="background:var(--green);height:100%;width:${progress}%;border-radius:4px;"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--gray-500);margin-bottom:6px;"><span>Payment Progress</span><span>${prog.toFixed(0)}%</span></div>
+        <div style="background:var(--gray-200);border-radius:4px;height:6px;overflow:hidden;"><div style="background:var(--green);height:100%;width:${prog}%;border-radius:4px;"></div></div>
       </div>
       <div style="border-top:1px solid var(--gray-200);padding:14px 18px;">
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-500);margin-bottom:10px;">Payment & Order History</div>
-        ${pList.length?pList.map(p=>{
-          const isOrder=p.note&&p.note.startsWith('ORDER:');
-          return `<div class="ph-entry ${isOrder?'order':'payment'}">
-            <div class="ph-left">
-              <div style="font-size:13px;font-weight:600;">${isOrder?'🛍 '+esc(p.note.replace('ORDER:','').trim()):'💳 '+esc(p.note||'Payment')+(p.percentage?` (${p.percentage}%)`:'')}</div>
-              ${p.payment_method?`<div style="font-size:11px;color:var(--gray-500);margin-top:2px;">via ${esc(p.payment_method)}${p.transaction_id?' · TXN: '+esc(p.transaction_id):''}</div>`:''}
-              <div class="ph-note">${fmtDate(p.paid_at)}</div>
-            </div>
-            <div class="ph-right"><div class="ph-amt">${isOrder?'-':'+'}${fmt(p.amount)}</div></div>
-          </div>`;
-        }).join(''):`<div style="color:var(--gray-500);font-size:13px;text-align:center;padding:16px;">No payments yet · এখনো কোনো পেমেন্ট হয়নি</div>`}
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-500);margin-bottom:10px;">Payment &amp; Order History</div>
+        ${pList.length?pList.map(p=>{const isO=p.note&&p.note.startsWith('ORDER:');return`<div class="ph-entry ${isO?'order-entry':'payment'}">
+          <div><div style="font-size:13px;font-weight:600;">${isO?'🛍 '+esc(p.note.replace('ORDER:','').trim()):'💳 '+esc(p.note||'Payment')+(p.percentage?` (${p.percentage}%)`:'')}</div>
+          ${p.payment_method?`<div class="ph-note">via ${esc(p.payment_method)}${p.transaction_id?' · TXN: '+esc(p.transaction_id):''}</div>`:''}
+          <div class="ph-note">${fmtDT(p.paid_at)}</div></div>
+          <div class="${isO?'ph-amt-blue':'ph-amt-green'}">${fmt(p.amount)}</div>
+        </div>`;}).join(''):`<div style="color:var(--gray-500);font-size:13px;text-align:center;padding:12px 0;">No payments yet</div>`}
       </div>
     </div>`;
   }
-
   document.getElementById('sp-results-container').innerHTML=html;
   document.getElementById('status-input-view').classList.add('hidden');
   document.getElementById('status-dashboard-view').classList.remove('hidden');
 }
 
-// ═══════════════════════════════════
-// ORDER OFFER
-// ═══════════════════════════════════
-async function orderOffer(offerId,mobile,price,title){
-  // Find approved claim with enough due
-  const{data:claims}=await sb.select('claims',`?mobile=eq.${mobile}&status=eq.approved`);
-  if(!claims||claims.length===0){
-    alert('❌ You need an approved claim to order with due amount.\nদাবি approved হলে order করা যাবে।');return;
-  }
-  // Find claim with enough due
-  const eligible=claims.find(c=>Math.max(0,Number(c.due_amount||0)-Number(c.total_paid||0))>=price);
-  if(!eligible){
-    alert(`❌ Your due amount is insufficient for this offer (৳${Number(price).toLocaleString('en-BD')} needed).\nপর্যাপ্ত due amount নেই।`);return;
-  }
-  const remainingDue=Math.max(0,Number(eligible.due_amount||0)-Number(eligible.total_paid||0));
-  const newPaid=Number(eligible.total_paid||0)+Number(price);
-  const newDue=Math.max(0,remainingDue-Number(price));
-  const newStatus=newDue<=0?'paid':eligible.status;
-  await sb.update('claims',{total_paid:newPaid,status:newStatus},`?id=eq.${eligible.id}`);
-  await sb.insert('payments',{claim_id:eligible.id,amount:price,paid_at:new Date().toISOString(),note:`ORDER: ${title}`,payment_method:'Due Deduction'});
-  alert(`✅ Order placed!\n"${title}" ordered successfully.\n৳${Number(price).toLocaleString('en-BD')} deducted from your due.`);
-  // Refresh status
-  const{data:updated}=await sb.select('claims',`?mobile=eq.${mobile}&order=created_at.desc`);
-  if(updated)await renderStatusDashboard(updated,mobile);
+function openOrderModal(offerId,mobile,price,title){
+  pendingOrderOffer={id:offerId,price:Number(price),title};pendingOrderMobile=mobile;
+  const total=Number(price)+deliveryCharge;
+  document.getElementById('order-offer-summary').innerHTML=`<strong>${esc(title)}</strong><br>Offer: ${fmt(price)} + Delivery: ${fmt(deliveryCharge)} = <strong>${fmt(total)}</strong> from due`;
+  ['od-house','od-thana','od-district'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('od-mobile').value=mobile;
+  document.getElementById('order-alert').innerHTML='';
+  document.getElementById('order-modal').classList.remove('hidden');
+}
+function closeOrderModal(){document.getElementById('order-modal').classList.add('hidden');pendingOrderOffer=null;pendingOrderMobile=null;}
+
+async function confirmOrder(){
+  const house=document.getElementById('od-house').value.trim();
+  const thana=document.getElementById('od-thana').value.trim();
+  const district=document.getElementById('od-district').value.trim();
+  const dmobile=document.getElementById('od-mobile').value.trim();
+  if(!house)return showAlert('order-alert','Enter house/road/block','error');
+  if(!thana)return showAlert('order-alert','Enter thana','error');
+  if(!district)return showAlert('order-alert','Enter district','error');
+  if(!/^01[3-9]\d{8}$/.test(dmobile))return showAlert('order-alert','Invalid mobile number','error');
+  const totalCost=pendingOrderOffer.price+deliveryCharge;
+  const{data:claims}=await sb.sel('claims',`?mobile=eq.${pendingOrderMobile}&status=eq.approved`);
+  if(!claims||!claims.length){showAlert('order-alert','You need an approved claim to order with due amount.','error');return;}
+  const eligible=claims.find(c=>Math.max(0,Number(c.due_amount||0)-Number(c.total_paid||0))>=totalCost);
+  if(!eligible){showAlert('order-alert',`Insufficient due amount. Need ${fmt(totalCost)}.`,'error');return;}
+  const{data:existing}=await sb.sel('orders',`?claim_id=eq.${eligible.id}&offer_id=eq.${pendingOrderOffer.id}&status=neq.cancelled`);
+  if(existing&&existing.length>0){showAlert('order-alert','You have already ordered this offer.','error');return;}
+  const btn=document.getElementById('confirm-order-btn');btn.innerHTML='<span class="spinner"></span>';btn.disabled=true;
+  const orderRef=genRef();
+  const rd=Math.max(0,Number(eligible.due_amount||0)-Number(eligible.total_paid||0));
+  const newPaid=Number(eligible.total_paid||0)+totalCost;
+  const newStatus=Math.max(0,rd-totalCost)<=0?'paid':eligible.status;
+  await sb.upd('claims',{total_paid:newPaid,status:newStatus},`?id=eq.${eligible.id}`);
+  await sb.ins('payments',{claim_id:eligible.id,amount:totalCost,paid_at:new Date().toISOString(),note:`ORDER: ${pendingOrderOffer.title}`,payment_method:'Due Deduction'});
+  await sb.ins('orders',{claim_id:eligible.id,offer_id:pendingOrderOffer.id,offer_title:pendingOrderOffer.title,offer_price:pendingOrderOffer.price,delivery_charge:deliveryCharge,total_amount:totalCost,house_road_block:house,thana,district,delivery_mobile:dmobile,status:'pending',order_ref:orderRef});
+  await sb.ins('notifications',{type:'new_order',title:'New Order!',body:`${orderRef} — ${pendingOrderOffer.title} by ${pendingOrderMobile}`,for_admin:true,ref_id:orderRef,is_read:false});
+  await sb.ins('notifications',{type:'order_placed',title:'Order Placed!',body:`Order ${orderRef} placed successfully.`,for_mobile:pendingOrderMobile,for_admin:false,ref_id:orderRef,is_read:false});
+  const savedOffer=pendingOrderOffer;const savedMobile=pendingOrderMobile;
+  btn.innerHTML='Confirm Order';btn.disabled=false;
+  closeOrderModal();
+  alert(`✅ Order placed!\nOrder ID: ${orderRef}\n${fmt(totalCost)} deducted from your due.`);
+  const{data:updated}=await sb.sel('claims',`?mobile=eq.${savedMobile}&order=created_at.desc`);
+  if(updated)await renderStatusDashboard(updated,savedMobile);
 }
 
-// ═══════════════════════════════════
-// ALL OFFERS PAGE
-// ═══════════════════════════════════
 async function openAllOffersPage(){
   hidePage('status-page');showPage('all-offers-page');
-  const{data:offers}=await sb.select('offers','?order=created_at.desc');
+  const{data:offers}=await sb.sel('offers','?order=created_at.desc');
   const old=(offers||[]).filter(o=>isExpired(o.expiry_date));
   document.getElementById('all-offers-list').innerHTML=old.length?old.map(o=>`
-    <div class="old-offer-item">
-      ${o.image_url?`<img src="${esc(o.image_url)}" alt="${esc(o.title)}" onerror="this.style.display='none'">`:`<div style="width:50px;height:50px;background:var(--gray-100);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🎁</div>`}
-      <div class="ooi-info">
-        <div class="ooi-title">${esc(o.title)}</div>
-        <div class="ooi-price">${fmt(o.price)} · Expired ${fmtDate(o.expiry_date)}</div>
-      </div>
+    <div style="border:1px solid var(--gray-200);border-radius:8px;padding:12px;margin-bottom:8px;display:flex;gap:12px;align-items:center;">
+      ${o.image_url?`<img src="${esc(o.image_url)}" style="width:50px;height:50px;object-fit:cover;border-radius:6px;flex-shrink:0;" onerror="this.style.display='none'">`:`<div style="width:50px;height:50px;background:var(--gray-100);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🎁</div>`}
+      <div style="flex:1;"><div style="font-weight:700;font-size:13px;">${esc(o.title)}</div><div style="font-size:12px;color:var(--gray-500);">${fmt(o.price)} · Expired ${fmtDate(o.expiry_date)}</div></div>
       <span class="badge badge-expired">Expired</span>
     </div>`).join(''):`<div class="no-data">No past offers</div>`;
 }
 function closeAllOffersPage(){hidePage('all-offers-page');showPage('status-page');}
 
-// ═══════════════════════════════════
-// ADMIN
-// ═══════════════════════════════════
 function showAdmin(){if(adminLoggedIn){hidePage('public-page');showPage('admin-page');loadAdminData();return;}hidePage('public-page');showPage('admin-login-page');}
-function doLogin(){const u=document.getElementById('l-user').value.trim();const p=document.getElementById('l-pass').value;if(u==='payback'&&p==='Payback123@'){adminLoggedIn=true;hidePage('admin-login-page');showPage('admin-page');loadAdminData();}else{document.getElementById('login-alert').innerHTML='<div class="alert alert-error">Invalid credentials</div>';}}
+function doLogin(){const u=document.getElementById('l-user').value.trim(),p=document.getElementById('l-pass').value;if(u==='payback'&&p==='Payback123@'){adminLoggedIn=true;hidePage('admin-login-page');showPage('admin-page');loadAdminData();}else document.getElementById('login-alert').innerHTML='<div class="alert alert-error">Invalid credentials</div>';}
 function adminLogout(){adminLoggedIn=false;hidePage('admin-page');showPage('public-page');}
 
 function adminTab(name,el){
-  ['overview','claims','distribute','offers'].forEach(t=>document.getElementById('tab-'+t).classList.add('hidden'));
+  ['overview','claims','distribute','orders','offers','settings'].forEach(t=>document.getElementById('tab-'+t).classList.add('hidden'));
   document.querySelectorAll('.admin-nav button').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+name).classList.remove('hidden');el.classList.add('active');
   if(name==='claims')renderClaimsList();
   if(name==='distribute')renderDistribute();
+  if(name==='orders')loadOrders();
   if(name==='offers')loadAdminOffers();
+  if(name==='settings')loadSettings();
 }
 
-async function loadAdminData(){const{data}=await sb.select('claims','?order=created_at.desc');allClaims=data||[];renderOverview();}
+async function loadAdminData(){
+  const{data}=await sb.sel('claims','?order=created_at.desc');
+  allClaims=data||[];renderOverview();loadAdminNotifs();loadDeliveryCharge();
+}
+async function loadDeliveryCharge(){
+  const{data}=await sb.sel('settings','?key=eq.delivery_charge');
+  if(data&&data[0])deliveryCharge=Number(data[0].value)||100;
+}
 
 function renderOverview(){
-  const total=allClaims.length;const pending=allClaims.filter(c=>c.status==='pending').length;
+  const total=allClaims.length,pending=allClaims.filter(c=>c.status==='pending').length;
   const invested=allClaims.reduce((s,c)=>s+Number(c.invested_amount||0),0);
   const paid=allClaims.reduce((s,c)=>s+Number(c.total_paid||0),0);
   const due=allClaims.reduce((s,c)=>s+Math.max(0,Number(c.due_amount||0)-Number(c.total_paid||0)),0);
   document.getElementById('a-total').textContent=total;document.getElementById('a-pending').textContent=pending;
   document.getElementById('a-invested').textContent=fmt(invested);document.getElementById('a-paid').textContent=fmt(paid);document.getElementById('a-due').textContent=fmt(due);
-  const recent=allClaims.slice(0,5);
-  document.getElementById('recent-claims-list').innerHTML=recent.length?recent.map(c=>claimItemHtml(c)).join(''):'<div class="no-data">No claims yet</div>';
+  document.getElementById('recent-claims-list').innerHTML=allClaims.slice(0,5).map(c=>claimItemHtml(c)).join('')||'<div class="no-data">No claims yet</div>';
 }
 
 function claimItemHtml(c){
   const rd=Math.max(0,Number(c.due_amount||0)-Number(c.total_paid||0));
+  const bc=c.status==='correction'?'badge-correction':'badge-'+c.status;
+  const bl=c.status==='correction'?'⚠️ Correction':c.status;
   return`<div class="claim-item" onclick="openDetail('${c.id}')">
-    <div class="claim-item-top"><div><div class="claim-item-name">${esc(c.name)}</div><div class="claim-item-company">📍 ${esc(c.company)} · ${esc(c.mobile)}</div></div><span class="badge badge-${c.status}">${c.status}</span></div>
-    <div class="claim-item-amounts"><span class="amt">Invested: <span class="v">${fmt(c.invested_amount)}</span></span><span class="amt">Paid: <span class="v amount-paid">${fmt(c.total_paid)}</span></span><span class="amt">Due: <span class="v amount-due">${fmt(rd)}</span></span></div>
+    <div class="claim-item-top"><div><div class="claim-item-name">${esc(c.name)}</div><div class="claim-item-company">📍 ${esc(c.company)} · ${esc(c.mobile)}</div></div><span class="badge ${bc}">${bl}</span></div>
+    <div class="claim-amounts"><span class="amt">Invested: <span class="v">${fmt(c.invested_amount)}</span></span><span class="amt">Paid: <span class="v amount-paid">${fmt(c.total_paid)}</span></span><span class="amt">Due: <span class="v amount-due">${fmt(rd)}</span></span></div>
   </div>`;
 }
-
 function renderClaimsList(){
   const q=(document.getElementById('search-input').value||'').toLowerCase();
   const st=document.getElementById('filter-status').value;
-  const filtered=allClaims.filter(c=>{const mq=!q||c.name?.toLowerCase().includes(q)||c.mobile?.includes(q)||c.company?.toLowerCase().includes(q);const ms=!st||c.status===st;return mq&&ms;});
-  document.getElementById('claims-list').innerHTML=filtered.length?filtered.map(c=>claimItemHtml(c)).join(''):'<div class="no-data">No claims found</div>';
+  const f=allClaims.filter(c=>{const mq=!q||c.name?.toLowerCase().includes(q)||c.mobile?.includes(q)||c.company?.toLowerCase().includes(q);return mq&&(!st||c.status===st);});
+  document.getElementById('claims-list').innerHTML=f.length?f.map(c=>claimItemHtml(c)).join(''):'<div class="no-data">No claims found</div>';
 }
-
 function renderDistribute(){
-  const approved=allClaims.filter(c=>c.status==='approved');
-  document.getElementById('approved-claims-list').innerHTML=approved.length?approved.map(c=>claimItemHtml(c)).join(''):'<div class="no-data">No approved claims</div>';
+  const a=allClaims.filter(c=>c.status==='approved');
+  document.getElementById('approved-claims-list').innerHTML=a.length?a.map(c=>claimItemHtml(c)).join(''):'<div class="no-data">No approved claims</div>';
 }
-
 function updateGlobalPreview(){
   const pct=parseFloat(document.getElementById('global-pct').value)||0;
-  const approved=allClaims.filter(c=>c.status==='approved');
-  if(!pct||!approved.length){document.getElementById('global-preview').innerHTML='<p>Enter a percentage to preview</p>';return;}
-  const totalDue=approved.reduce((s,c)=>s+Math.max(0,Number(c.due_amount||0)-Number(c.total_paid||0)),0);
-  const totalPayout=totalDue*(pct/100);
-  document.getElementById('global-preview').innerHTML=`<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span>${approved.length} approved claims</span></div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span>Total due</span><span>${fmt(totalDue)}</span></div><div style="display:flex;justify-content:space-between;font-size:15px;font-weight:700;"><span>${pct}% payout</span><span style="color:var(--green);">${fmt(totalPayout)}</span></div>`;
+  const a=allClaims.filter(c=>c.status==='approved');
+  if(!pct||!a.length){document.getElementById('global-preview').innerHTML='<p style="font-size:13px;color:var(--gray-500);">Enter percentage to preview</p>';return;}
+  const td=a.reduce((s,c)=>s+Math.max(0,Number(c.due_amount||0)-Number(c.total_paid||0)),0);
+  document.getElementById('global-preview').innerHTML=`<div class="calc-row"><span>${a.length} approved claims</span></div><div class="calc-row"><span>Total due</span><span>${fmt(td)}</span></div><div class="calc-row"><span>${pct}% payout</span><span style="color:var(--green);">${fmt(td*pct/100)}</span></div>`;
 }
-
 async function distributeGlobal(){
   const pct=parseFloat(document.getElementById('global-pct').value)||0;
-  if(!pct||pct<=0||pct>100){alert('Enter a valid percentage (1-100)');return;}
-  const approved=allClaims.filter(c=>c.status==='approved');
-  if(!approved.length){alert('No approved claims to distribute');return;}
-  if(!confirm(`Distribute ${pct}% to ${approved.length} approved claims?`))return;
-  let done=0;
-  for(const c of approved){
-    const rd=Math.max(0,Number(c.due_amount||0)-Number(c.total_paid||0));
-    if(rd<=0)continue;
-    const amount=rd*(pct/100);const newPaid=Number(c.total_paid||0)+amount;
-    const newStatus=Math.max(0,rd-amount)<=0?'paid':c.status;
-    await sb.update('claims',{total_paid:newPaid,status:newStatus},`?id=eq.${c.id}`);
-    await sb.insert('payments',{claim_id:c.id,amount,percentage:pct,paid_at:new Date().toISOString(),note:`Global ${pct}% distribution`,payment_method:'Admin',transaction_id:null});
-    done++;
+  if(!pct||pct>100)return alert('Enter valid percentage (1-100)');
+  const a=allClaims.filter(c=>c.status==='approved');
+  if(!a.length)return alert('No approved claims');
+  if(!confirm(`Distribute ${pct}% to ${a.length} claims?`))return;
+  for(const c of a){
+    const rd=Math.max(0,Number(c.due_amount||0)-Number(c.total_paid||0));if(rd<=0)continue;
+    const amt=rd*pct/100,newPaid=Number(c.total_paid||0)+amt;
+    await sb.upd('claims',{total_paid:newPaid,status:Math.max(0,rd-amt)<=0?'paid':c.status},`?id=eq.${c.id}`);
+    await sb.ins('payments',{claim_id:c.id,amount:amt,percentage:pct,paid_at:new Date().toISOString(),note:`Global ${pct}% distribution`,payment_method:'Admin'});
+    await sb.ins('notifications',{type:'payment',title:'Payment Received!',body:`${fmt(amt)} paid to your account.`,for_mobile:c.mobile,for_admin:false,is_read:false});
   }
-  alert(`✅ Done! Distributed to ${done} claims.`);
-  await loadAdminData();renderDistribute();
+  alert('✅ Distribution complete!');await loadAdminData();
 }
 
-// ═══════════════════════════════════
-// CLAIM DETAIL
-// ═══════════════════════════════════
 async function openDetail(id){
   currentDetailId=id;const claim=allClaims.find(c=>c.id==id);if(!claim)return;
-  const{data:payments}=await sb.select('payments',`?claim_id=eq.${id}&order=paid_at.desc`);
-  const pList=payments||[];
+  const{data:payments}=await sb.sel('payments',`?claim_id=eq.${id}&order=paid_at.desc`);
+  const{data:history}=await sb.sel('claim_history',`?claim_id=eq.${id}&order=version.desc`);
+  const pList=payments||[],hList=history||[];
   const rd=Math.max(0,Number(claim.due_amount||0)-Number(claim.total_paid||0));
   document.getElementById('dp-title').textContent=claim.name;
   document.getElementById('dp-body').innerHTML=`
@@ -839,196 +869,292 @@ async function openDetail(id){
       <div class="detail-amt-card paid"><span class="dac-val">${fmt(claim.total_paid)}</span><div class="dac-lbl">Paid</div></div>
       <div class="detail-amt-card due"><span class="dac-val">${fmt(rd)}</span><div class="dac-lbl">Due</div></div>
     </div>
-    <div class="detail-info-row"><span class="k">Company</span><span class="v">${esc(claim.company)}</span></div>
-    <div class="detail-info-row"><span class="k">Mobile</span><span class="v">${esc(claim.mobile)}</span></div>
-    <div class="detail-info-row"><span class="k">Email</span><span class="v">${esc(claim.email)||'—'}</span></div>
-    <div class="detail-info-row"><span class="k">Nagad/bKash</span><span class="v">${esc(claim.bkash_nagad)}</span></div>
-    <div class="detail-info-row"><span class="k">Bank Details</span><span class="v">${esc(claim.bank_details)||'—'}</span></div>
-    <div class="detail-info-row"><span class="k">Submitted</span><span class="v">${fmtDate(claim.created_at)}</span></div>
-    <div class="detail-info-row"><span class="k">Status</span>
-      <select onchange="updateStatus('${claim.id}',this.value)" style="border:1.5px solid var(--gray-200);border-radius:6px;padding:5px 10px;font-family:var(--font);font-size:13px;outline:none;">
-        ${['pending','approved','paid','rejected'].map(s=>`<option value="${s}" ${claim.status===s?'selected':''}>${s}</option>`).join('')}
+    <div class="info-row"><span class="k">Company</span><span class="v">${esc(claim.company)}</span></div>
+    <div class="info-row"><span class="k">Mobile</span><span class="v">${esc(claim.mobile)}</span></div>
+    <div class="info-row"><span class="k">Email</span><span class="v">${esc(claim.email)||'—'}</span></div>
+    <div class="info-row"><span class="k">Nagad/bKash</span><span class="v">${esc(claim.bkash_nagad)}</span></div>
+    <div class="info-row"><span class="k">Bank</span><span class="v">${esc(claim.bank_details)||'—'}</span></div>
+    <div class="info-row"><span class="k">Submitted</span><span class="v">${fmtDate(claim.created_at)} · v${claim.version||1}</span></div>
+    <div class="info-row"><span class="k">Status</span>
+      <select onchange="updateClaimStatus('${claim.id}',this.value)" style="border:1.5px solid var(--gray-200);border-radius:6px;padding:6px 10px;font-family:var(--font);font-size:13px;outline:none;">
+        ${['pending','approved','paid','rejected','correction'].map(s=>`<option value="${s}" ${claim.status===s?'selected':''}>${s==='correction'?'Correction Needed':s}</option>`).join('')}
       </select>
+    </div>
+    <div id="correction-note-section" class="${claim.status==='correction'?'':'hidden'}" style="margin-top:12px;">
+      <div class="form-group"><label class="form-label">Correction Note for Claimer</label>
+        <textarea class="form-input" id="correction-note-input" rows="3" placeholder="Explain what needs correction…">${esc(claim.correction_note||'')}</textarea>
+        <button class="btn btn-yellow btn-sm" style="margin-top:8px;width:100%;" onclick="saveCorrectionNote('${claim.id}')">Save Note &amp; Notify Claimer</button>
+      </div>
     </div>
     <div class="pay-section">
       <h4>💸 Make a Payment</h4>
-      <div class="pay-mode-tabs">
-        <button class="pay-mode-tab active" onclick="payTab('pct',this)">By Percentage</button>
-        <button class="pay-mode-tab" onclick="payTab('amt',this)">Fixed Amount</button>
+      <div class="pay-tabs">
+        <button class="pay-tab active" onclick="payTab('pct',this)">By %</button>
+        <button class="pay-tab" onclick="payTab('amt',this)">Fixed ৳</button>
       </div>
-      <div id="pay-pct-mode"><div class="form-group"><label class="form-label">Percentage</label><input type="number" class="form-input" id="pay-pct" placeholder="e.g. 10" min="1" max="100" oninput="calcPayPreview()"></div></div>
-      <div id="pay-amt-mode" class="hidden"><div class="form-group"><label class="form-label">Amount (৳)</label><input type="number" class="form-input" id="pay-amt" placeholder="e.g. 5000" min="1" oninput="calcPayPreview()"></div></div>
-      <div class="pay-calc-display" id="pay-preview">
-        <div class="calc-row"><span>Due remaining</span><span class="amount-due">${fmt(rd)}</span></div>
-        <div class="calc-row"><span>This payment</span><span class="green">—</span></div>
-      </div>
+      <div id="pay-pct-mode"><div class="form-group"><label class="form-label">Percentage</label><input type="number" class="form-input" id="pay-pct" placeholder="10" min="1" max="100" oninput="calcPayPreview()"></div></div>
+      <div id="pay-amt-mode" class="hidden"><div class="form-group"><label class="form-label">Amount (৳)</label><input type="number" class="form-input" id="pay-amt" placeholder="5000" min="1" oninput="calcPayPreview()"></div></div>
+      <div class="calc-box" id="pay-preview"><div class="calc-row"><span>Due remaining</span><span class="amount-due">${fmt(rd)}</span></div><div class="calc-row"><span>This payment</span><span style="color:var(--green);">—</span></div></div>
       <div class="form-group"><label class="form-label">Payment Method <span class="req">*</span></label>
-        <select class="form-input" id="pay-method">
-          <option value="">Select method…</option>
-          <option value="bKash">bKash</option>
-          <option value="Nagad">Nagad</option>
-          <option value="Bank Transfer">Bank Transfer</option>
-          <option value="Cash">Cash</option>
-        </select>
+        <select class="form-input" id="pay-method"><option value="">Select…</option><option>bKash</option><option>Nagad</option><option>Bank Transfer</option><option>Cash</option></select>
       </div>
-      <div class="form-group"><label class="form-label">Transaction ID <span style="font-size:11px;color:var(--gray-500);font-weight:400;">(Optional)</span></label><input type="text" class="form-input" id="pay-txn" placeholder="e.g. TRX1234567"></div>
-      <div class="form-group"><label class="form-label">Note (optional)</label><input type="text" class="form-input" id="pay-note" placeholder="e.g. 1st installment"></div>
+      <div class="form-group"><label class="form-label">Transaction ID (Optional)</label><input type="text" class="form-input" id="pay-txn" placeholder="TRX…"></div>
+      <div class="form-group"><label class="form-label">Note</label><input type="text" class="form-input" id="pay-note" placeholder="e.g. 1st installment"></div>
       <button class="btn btn-green btn-full" onclick="sendPayment('${claim.id}')">Mark Payment Sent</button>
     </div>
+    ${hList.length>1?`<div style="margin-top:20px;border-top:1px solid var(--gray-200);padding-top:18px;">
+      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-500);margin-bottom:12px;">Claim History</div>
+      ${hList.map((h,i)=>`<div class="history-item ${i===0?'latest':''}">
+        <div style="font-size:12px;font-weight:700;">v${h.version} ${i===0?'(Latest)':''} · ${fmtDate(h.created_at)}</div>
+        <div style="font-size:12px;color:var(--gray-500);margin-top:4px;">Company: ${esc(h.company)} · Invested: ${fmt(h.invested_amount)} · Due: ${fmt(h.due_amount)}</div>
+      </div>`).join('')}
+    </div>`:''}
     <div class="ph-list">
-      <h4>Payment & Order History</h4>
-      ${pList.length?pList.map(p=>{
-        const isOrder=p.note&&p.note.startsWith('ORDER:');
-        return`<div class="ph-entry ${isOrder?'order':'payment'}">
-          <div class="ph-left">
-            <div>${isOrder?'🛍 '+esc(p.note.replace('ORDER:','').trim()):'💳 '+esc(p.note||'Payment')+(p.percentage?` (${p.percentage}%)`:'')}</div>
-            ${p.payment_method?`<div class="ph-note">via ${esc(p.payment_method)}${p.transaction_id?' · TXN: '+esc(p.transaction_id):''}</div>`:''}
-            <div class="ph-note">${fmtDate(p.paid_at)}</div>
-          </div>
-          <div class="ph-right"><div class="ph-amt">${fmt(p.amount)}</div></div>
-        </div>`;
-      }).join(''):'<div style="color:var(--gray-500);font-size:13px;text-align:center;padding:16px;">No payments yet</div>'}
-    </div>
-  `;
-  document.getElementById('detail-overlay').classList.remove('hidden');
-  document.body.style.overflow='hidden';
+      <h4>Payment History</h4>
+      ${pList.length?pList.map(p=>{const isO=p.note&&p.note.startsWith('ORDER:');return`<div class="ph-entry ${isO?'order-entry':'payment'}">
+        <div><div style="font-size:13px;font-weight:600;">${isO?'🛍 '+esc(p.note.replace('ORDER:','').trim()):'💳 '+esc(p.note||'Payment')+(p.percentage?` (${p.percentage}%)`:'')}</div>
+        ${p.payment_method?`<div class="ph-note">via ${esc(p.payment_method)}${p.transaction_id?' · TXN: '+esc(p.transaction_id):''}</div>`:''}
+        <div class="ph-note">${fmtDT(p.paid_at)}</div></div>
+        <div class="${isO?'ph-amt-blue':'ph-amt-green'}">${fmt(p.amount)}</div>
+      </div>`;}).join(''):`<div style="color:var(--gray-500);font-size:13px;text-align:center;padding:12px 0;">No payments yet</div>`}
+    </div>`;
+  document.getElementById('detail-overlay').classList.remove('hidden');document.body.style.overflow='hidden';
 }
-
 function closeDetail(){document.getElementById('detail-overlay').classList.add('hidden');document.body.style.overflow='';currentDetailId=null;}
 
-let currentPayMode='pct';
+async function updateClaimStatus(id,status){
+  await sb.upd('claims',{status},`?id=eq.${id}`);
+  const idx=allClaims.findIndex(c=>c.id==id);if(idx>=0)allClaims[idx].status=status;
+  const sec=document.getElementById('correction-note-section');
+  if(sec)sec.classList.toggle('hidden',status!=='correction');
+  const claim=allClaims[idx];
+  if(claim&&(status==='approved'||status==='paid'||status==='correction'))
+    await sb.ins('notifications',{type:'status_update',title:`Claim ${status==='correction'?'Needs Correction':status}`,body:status==='correction'?'Admin requested corrections.':'Your claim status updated.',for_mobile:claim.mobile,for_admin:false,is_read:false});
+  renderOverview();
+}
+async function saveCorrectionNote(id){
+  const note=document.getElementById('correction-note-input')?.value||'';
+  await sb.upd('claims',{correction_note:note,status:'correction'},`?id=eq.${id}`);
+  const idx=allClaims.findIndex(c=>c.id==id);
+  if(idx>=0){allClaims[idx].correction_note=note;allClaims[idx].status='correction';}
+  const claim=allClaims[idx];
+  await sb.ins('notifications',{type:'correction',title:'Correction Required',body:`Admin note: ${note.substring(0,80)}`,for_mobile:claim?.mobile,for_admin:false,is_read:false});
+  alert('✅ Correction note saved!');
+}
 function payTab(mode,el){
   currentPayMode=mode;
-  document.querySelectorAll('.pay-mode-tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');
-  if(mode==='pct'){document.getElementById('pay-pct-mode').classList.remove('hidden');document.getElementById('pay-amt-mode').classList.add('hidden');}
-  else{document.getElementById('pay-amt-mode').classList.remove('hidden');document.getElementById('pay-pct-mode').classList.add('hidden');}
+  document.querySelectorAll('.pay-tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');
+  document.getElementById('pay-pct-mode').classList.toggle('hidden',mode!=='pct');
+  document.getElementById('pay-amt-mode').classList.toggle('hidden',mode!=='amt');
   calcPayPreview();
 }
-
 function calcPayPreview(){
   const claim=allClaims.find(c=>c.id==currentDetailId);if(!claim)return;
   const due=Math.max(0,Number(claim.due_amount||0)-Number(claim.total_paid||0));
-  let amt=0;
-  if(currentPayMode==='pct'){const pct=parseFloat(document.getElementById('pay-pct')?.value)||0;amt=due*(pct/100);}
-  else{amt=parseFloat(document.getElementById('pay-amt')?.value)||0;}
-  document.getElementById('pay-preview').innerHTML=`
-    <div class="calc-row"><span>Due remaining</span><span class="amount-due">${fmt(due)}</span></div>
-    <div class="calc-row"><span>This payment</span><span class="green">${fmt(amt)}</span></div>
-    <div class="calc-row"><span>After payment</span><span>${fmt(Math.max(0,due-amt))}</span></div>`;
+  let amt=currentPayMode==='pct'?(parseFloat(document.getElementById('pay-pct')?.value)||0)*due/100:parseFloat(document.getElementById('pay-amt')?.value)||0;
+  document.getElementById('pay-preview').innerHTML=`<div class="calc-row"><span>Due remaining</span><span class="amount-due">${fmt(due)}</span></div><div class="calc-row"><span>This payment</span><span style="color:var(--green);">${fmt(amt)}</span></div><div class="calc-row"><span>After payment</span><span>${fmt(Math.max(0,due-amt))}</span></div>`;
 }
-
-async function updateStatus(id,status){
-  await sb.update('claims',{status},`?id=eq.${id}`);
-  const idx=allClaims.findIndex(c=>c.id==id);if(idx>=0)allClaims[idx].status=status;renderOverview();
-}
-
 async function sendPayment(id){
   const claim=allClaims.find(c=>c.id==id);if(!claim)return;
   const due=Math.max(0,Number(claim.due_amount||0)-Number(claim.total_paid||0));
   let amt=0,pct=null;
-  if(currentPayMode==='pct'){pct=parseFloat(document.getElementById('pay-pct')?.value)||0;amt=due*(pct/100);}
-  else{amt=parseFloat(document.getElementById('pay-amt')?.value)||0;}
+  if(currentPayMode==='pct'){pct=parseFloat(document.getElementById('pay-pct')?.value)||0;amt=due*pct/100;}
+  else amt=parseFloat(document.getElementById('pay-amt')?.value)||0;
   const method=document.getElementById('pay-method')?.value||'';
   const txn=document.getElementById('pay-txn')?.value||'';
   const note=document.getElementById('pay-note')?.value||'';
-  if(amt<=0){alert('Enter a valid amount');return;}
-  if(amt>due){alert(`Amount exceeds due (${fmt(due)})`);return;}
-  if(!method){alert('Please select a payment method');return;}
-  const newPaid=Number(claim.total_paid||0)+amt;
-  const newDue=Math.max(0,due-amt);const newStatus=newDue<=0?'paid':claim.status;
-  await sb.update('claims',{total_paid:newPaid,status:newStatus},`?id=eq.${id}`);
-  await sb.insert('payments',{claim_id:id,amount:amt,percentage:pct,paid_at:new Date().toISOString(),note,payment_method:method,transaction_id:txn||null});
-  const idx=allClaims.findIndex(c=>c.id==id);if(idx>=0){allClaims[idx].total_paid=newPaid;allClaims[idx].status=newStatus;}
+  if(amt<=0)return alert('Enter valid amount');
+  if(amt>due)return alert(`Amount exceeds due (${fmt(due)})`);
+  if(!method)return alert('Select payment method');
+  const newPaid=Number(claim.total_paid||0)+amt,newDue=Math.max(0,due-amt);
+  await sb.upd('claims',{total_paid:newPaid,status:newDue<=0?'paid':claim.status},`?id=eq.${id}`);
+  await sb.ins('payments',{claim_id:id,amount:amt,percentage:pct,paid_at:new Date().toISOString(),note,payment_method:method,transaction_id:txn||null});
+  await sb.ins('notifications',{type:'payment',title:'Payment Received!',body:`${fmt(amt)} paid via ${method}${txn?' (TXN: '+txn+')':''}`,for_mobile:claim.mobile,for_admin:false,is_read:false});
+  const idx=allClaims.findIndex(c=>c.id==id);if(idx>=0){allClaims[idx].total_paid=newPaid;allClaims[idx].status=newDue<=0?'paid':claim.status;}
   closeDetail();renderOverview();alert('✅ Payment recorded!');
 }
 
-// ═══════════════════════════════════
-// OFFERS ADMIN
-// ═══════════════════════════════════
+async function loadOrders(){
+  const{data}=await sb.sel('orders','?order=created_at.desc');
+  allOrders=data||[];renderOrdersList();
+}
+function renderOrdersList(){
+  const q=(document.getElementById('order-search')?.value||'').toLowerCase();
+  const st=document.getElementById('order-filter-status')?.value||'';
+  const dt=document.getElementById('order-filter-date')?.value||'';
+  const f=allOrders.filter(o=>{
+    const mq=!q||o.order_ref?.toLowerCase().includes(q)||o.offer_title?.toLowerCase().includes(q)||o.delivery_mobile?.includes(q);
+    return mq&&(!st||o.status===st)&&(!dt||o.created_at?.startsWith(dt));
+  });
+  document.getElementById('orders-list').innerHTML=f.length?f.map(o=>`
+    <div class="order-item" onclick="openOrderDetail('${o.id}')">
+      <div class="order-item-top"><div><div style="font-weight:700;font-size:14px;">${esc(o.offer_title)}</div><div class="order-ref">${esc(o.order_ref)}</div></div><span class="badge badge-order-${o.status}">${o.status}</span></div>
+      <div style="font-size:13px;color:var(--gray-500);margin-bottom:6px;">📱 ${esc(o.delivery_mobile)} · 📍 ${esc(o.thana)}, ${esc(o.district)}</div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;"><span>Total: <strong>${fmt(o.total_amount)}</strong></span><span style="color:var(--gray-500);">${fmtDate(o.created_at)}</span></div>
+    </div>`).join(''):`<div class="no-data">No orders found</div>`;
+}
+async function openOrderDetail(id){
+  currentOrderId=id;const order=allOrders.find(o=>o.id==id);if(!order)return;
+  document.getElementById('odp-title').textContent=order.order_ref;
+  document.getElementById('odp-body').innerHTML=`
+    <div style="background:var(--gray-100);border-radius:10px;padding:16px;margin-bottom:16px;">
+      <div style="font-size:16px;font-weight:800;margin-bottom:4px;">${esc(order.offer_title)}</div>
+      <div style="font-size:13px;color:var(--gray-500);">Offer: ${fmt(order.offer_price)} + Delivery: ${fmt(order.delivery_charge)} = <strong>${fmt(order.total_amount)}</strong></div>
+    </div>
+    <div class="info-row"><span class="k">Order Ref</span><span class="v" style="font-family:monospace;">${esc(order.order_ref)}</span></div>
+    <div class="info-row"><span class="k">Status</span>
+      <select onchange="updateOrderStatus('${order.id}',this.value)" style="border:1.5px solid var(--gray-200);border-radius:6px;padding:6px 10px;font-family:var(--font);font-size:13px;outline:none;">
+        ${['pending','confirmed','shipped','delivered','cancelled'].map(s=>`<option value="${s}" ${order.status===s?'selected':''}>${s}</option>`).join('')}
+      </select>
+    </div>
+    <div class="info-row"><span class="k">Placed</span><span class="v">${fmtDT(order.created_at)}</span></div>
+    <div style="margin-top:14px;padding:14px;background:var(--blue-light);border-radius:8px;">
+      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#1d4ed8;margin-bottom:8px;">Delivery Address</div>
+      <div style="font-size:14px;font-weight:600;">${esc(order.house_road_block)}</div>
+      <div style="font-size:13px;color:var(--gray-700);">${esc(order.thana)}, ${esc(order.district)}</div>
+      <div style="font-size:13px;color:var(--gray-700);margin-top:4px;">📱 ${esc(order.delivery_mobile)}</div>
+    </div>
+    <div class="form-group" style="margin-top:16px;"><label class="form-label">Courier Tracking Number (Optional)</label><input type="text" class="form-input" id="tracking-input" value="${esc(order.tracking_number||'')}" placeholder="e.g. SA-12345678"></div>
+    <div class="form-group"><label class="form-label">Admin Note</label><input type="text" class="form-input" id="order-note-input" value="${esc(order.admin_note||'')}" placeholder="Internal note…"></div>
+    <button class="btn btn-black btn-full" onclick="saveOrderDetails('${order.id}')">Save Changes</button>
+    ${order.status!=='cancelled'?`<button class="btn btn-danger btn-full" style="margin-top:8px;" onclick="cancelOrder('${order.id}')">Cancel Order</button>`:''}`;
+  document.getElementById('order-detail-overlay').classList.remove('hidden');document.body.style.overflow='hidden';
+}
+function closeOrderDetail(){document.getElementById('order-detail-overlay').classList.add('hidden');document.body.style.overflow='';currentOrderId=null;}
+async function updateOrderStatus(id,status){
+  await sb.upd('orders',{status},`?id=eq.${id}`);
+  const idx=allOrders.findIndex(o=>o.id==id);if(idx>=0)allOrders[idx].status=status;
+  const order=allOrders[idx];
+  if(order){
+    const{data:claim}=await sb.sel('claims',`?id=eq.${order.claim_id}`);
+    if(claim&&claim[0])await sb.ins('notifications',{type:'order_update',title:`Order ${status.charAt(0).toUpperCase()+status.slice(1)}`,body:`Order ${order.order_ref} is now ${status}.`,for_mobile:claim[0].mobile,for_admin:false,is_read:false});
+  }
+  renderOrdersList();
+}
+async function saveOrderDetails(id){
+  const tracking=document.getElementById('tracking-input')?.value||'';
+  const note=document.getElementById('order-note-input')?.value||'';
+  await sb.upd('orders',{tracking_number:tracking||null,admin_note:note||null},`?id=eq.${id}`);
+  const idx=allOrders.findIndex(o=>o.id==id);
+  if(idx>=0){allOrders[idx].tracking_number=tracking||null;allOrders[idx].admin_note=note||null;}
+  alert('✅ Order updated!');closeOrderDetail();
+}
+async function cancelOrder(id){
+  if(!confirm('Cancel this order?'))return;
+  await sb.upd('orders',{status:'cancelled'},`?id=eq.${id}`);
+  const idx=allOrders.findIndex(o=>o.id==id);if(idx>=0)allOrders[idx].status='cancelled';
+  closeOrderDetail();renderOrdersList();
+}
+
+async function loadAdminNotifs(){
+  const{data}=await sb.sel('notifications','?for_admin=eq.true&order=created_at.desc&limit=20');
+  const notifs=data||[];
+  const unread=notifs.filter(n=>!n.is_read).length;
+  const badge=document.getElementById('bell-badge');
+  badge.textContent=unread>9?'9+':unread;badge.classList.toggle('show',unread>0);
+  document.getElementById('notif-list').innerHTML=notifs.length?notifs.map(n=>`
+    <div class="notif-item ${n.is_read?'':'unread'}" onclick="handleNotifClick('${n.id}','${n.type}')">
+      <div class="notif-item-title">${esc(n.title)}</div>
+      <div class="notif-item-body">${esc(n.body||'')}</div>
+      <div class="notif-item-time">${fmtDT(n.created_at)}</div>
+    </div>`).join(''):`<div class="no-data" style="padding:20px;">No notifications</div>`;
+}
+function toggleNotifPanel(){
+  notifPanelOpen=!notifPanelOpen;
+  document.getElementById('notif-panel').classList.toggle('hidden',!notifPanelOpen);
+  if(notifPanelOpen)loadAdminNotifs();
+}
+async function markAllRead(){
+  await sb.upd('notifications',{is_read:true},'?for_admin=eq.true&is_read=eq.false');
+  loadAdminNotifs();
+}
+async function handleNotifClick(id,type){
+  await sb.upd('notifications',{is_read:true},`?id=eq.${id}`);
+  toggleNotifPanel();
+  if(type==='new_claim'||type==='claim_resubmit'){const btn=document.querySelectorAll('.admin-nav button')[1];adminTab('claims',btn);}
+  else if(type==='new_order'){const btn=document.querySelectorAll('.admin-nav button')[3];adminTab('orders',btn);}
+}
+
 async function loadAdminOffers(){
-  const{data}=await sb.select('offers','?order=created_at.desc');
+  const{data}=await sb.sel('offers','?order=publish_date.asc');
   const offers=data||[];
-  document.getElementById('admin-offers-list').innerHTML=offers.length?offers.map(o=>`
-    <div style="border:1px solid var(--gray-200);border-radius:8px;padding:14px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;">
+  document.getElementById('admin-offers-list').innerHTML=offers.length?offers.map(o=>{
+    const status=isExpired(o.expiry_date)?'expired':isScheduled(o.publish_date)?'scheduled':'active';
+    return`<div style="border:1px solid var(--gray-200);border-radius:8px;padding:14px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;">
       ${o.image_url?`<img src="${esc(o.image_url)}" style="width:56px;height:56px;object-fit:cover;border-radius:6px;flex-shrink:0;" onerror="this.style.display='none'">`:`<div style="width:56px;height:56px;background:var(--gray-100);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;">🎁</div>`}
       <div style="flex:1;">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;">
-          <div style="font-weight:700;font-size:14px;">${esc(o.title)}</div>
-          <span class="badge ${isExpired(o.expiry_date)?'badge-expired':'badge-active'}">${isExpired(o.expiry_date)?'Expired':'Active'}</span>
-        </div>
-        <div style="font-size:12px;color:var(--gray-500);margin-bottom:6px;">${fmt(o.price)} · Expires ${fmtDate(o.expiry_date)}</div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;"><div style="font-weight:700;font-size:14px;">${esc(o.title)}</div><span class="badge badge-${status}">${status}</span></div>
+        <div style="font-size:12px;color:var(--gray-500);margin-bottom:4px;">${fmt(o.price)} · Publish: ${fmtDate(o.publish_date)} · Expires: ${fmtDate(o.expiry_date)}</div>
         <div style="font-size:12px;color:var(--gray-700);margin-bottom:10px;">${esc(o.description)}</div>
         <div style="display:flex;gap:8px;">
-          <button class="btn btn-outline btn-sm" onclick="editOffer(${JSON.stringify(o).replace(/"/g,'&quot;')})">Edit</button>
+          <button class="btn btn-outline btn-sm" onclick='editOffer(${JSON.stringify(o).replace(/'/g,"&#39;")})'>Edit</button>
           <button class="btn btn-danger btn-sm" onclick="deleteOffer('${o.id}')">Delete</button>
         </div>
       </div>
-    </div>`).join(''):'<div class="no-data">No offers yet · নতুন offer তৈরি করুন</div>';
+    </div>`;}).join(''):`<div class="no-data">No offers yet</div>`;
 }
-
 function openOfferForm(){
   editingOfferId=null;
   document.getElementById('offer-modal-title').textContent='New Offer';
-  document.getElementById('of-title').value='';
-  document.getElementById('of-desc').value='';
-  document.getElementById('of-price').value='';
-  document.getElementById('of-expiry').value='';
-  document.getElementById('of-image').value='';
+  ['of-title','of-desc','of-price','of-publish','of-expiry','of-image'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('of-img-preview').style.display='none';
   document.getElementById('save-offer-btn').textContent='Save Offer';
   document.getElementById('offer-form-alert').innerHTML='';
   document.getElementById('offer-modal').classList.remove('hidden');
 }
-
 function editOffer(o){
   editingOfferId=o.id;
   document.getElementById('offer-modal-title').textContent='Edit Offer';
   document.getElementById('of-title').value=o.title||'';
   document.getElementById('of-desc').value=o.description||'';
   document.getElementById('of-price').value=o.price||'';
+  document.getElementById('of-publish').value=o.publish_date?o.publish_date.split('T')[0]:'';
   document.getElementById('of-expiry').value=o.expiry_date?o.expiry_date.split('T')[0]:'';
   document.getElementById('of-image').value=o.image_url||'';
-  if(o.image_url){const img=document.getElementById('of-img-preview');img.src=o.image_url;img.style.display='block';}
+  const img=document.getElementById('of-img-preview');
+  if(o.image_url){img.src=o.image_url;img.style.display='block';}else img.style.display='none';
   document.getElementById('save-offer-btn').textContent='Update Offer';
   document.getElementById('offer-form-alert').innerHTML='';
   document.getElementById('offer-modal').classList.remove('hidden');
 }
-
-function previewOfferImg(){const url=document.getElementById('of-image').value;const img=document.getElementById('of-img-preview');if(url){img.src=url;img.style.display='block';}else{img.style.display='none';}}
-
+function previewOfferImg(){const url=document.getElementById('of-image').value;const img=document.getElementById('of-img-preview');if(url){img.src=url;img.style.display='block';}else img.style.display='none';}
 function closeOfferModal(){document.getElementById('offer-modal').classList.add('hidden');editingOfferId=null;}
-
 async function saveOffer(){
   const title=document.getElementById('of-title').value.trim();
   const description=document.getElementById('of-desc').value.trim();
   const price=parseFloat(document.getElementById('of-price').value)||0;
+  const publish_date=document.getElementById('of-publish').value;
   const expiry_date=document.getElementById('of-expiry').value;
   const image_url=document.getElementById('of-image').value.trim()||null;
-  if(!title){showAlert('offer-form-alert','Enter offer title','error');return;}
-  if(!description){showAlert('offer-form-alert','Enter offer description','error');return;}
-  if(price<=0){showAlert('offer-form-alert','Enter a valid price','error');return;}
-  if(!expiry_date){showAlert('offer-form-alert','Enter expiry date','error');return;}
+  if(!title)return showAlert('offer-form-alert','Enter offer title','error');
+  if(!description)return showAlert('offer-form-alert','Enter description','error');
+  if(price<=0)return showAlert('offer-form-alert','Enter valid price','error');
+  if(!publish_date)return showAlert('offer-form-alert','Enter publish date','error');
+  if(!expiry_date)return showAlert('offer-form-alert','Enter expiry date','error');
+  if(new Date(expiry_date)<=new Date(publish_date))return showAlert('offer-form-alert','Expiry must be after publish date','error');
   const btn=document.getElementById('save-offer-btn');btn.innerHTML='<span class="spinner"></span>';btn.disabled=true;
-  const payload={title,description,price,expiry_date,image_url};
-  let error;
-  if(editingOfferId){({error}=await sb.update('offers',payload,`?id=eq.${editingOfferId}`));}
-  else{({error}=await sb.insert('offers',payload));}
+  const payload={title,description,price,publish_date,expiry_date,image_url};
+  const{error}=editingOfferId?await sb.upd('offers',payload,`?id=eq.${editingOfferId}`):await sb.ins('offers',payload);
   btn.innerHTML=editingOfferId?'Update Offer':'Save Offer';btn.disabled=false;
-  if(error){showAlert('offer-form-alert','Failed to save offer','error');return;}
+  if(error)return showAlert('offer-form-alert','Failed to save','error');
   closeOfferModal();loadAdminOffers();alert('✅ Offer saved!');
 }
+async function deleteOffer(id){if(!confirm('Delete this offer?'))return;await sb.del('offers',`?id=eq.${id}`);loadAdminOffers();}
 
-async function deleteOffer(id){
-  if(!confirm('Delete this offer?'))return;
-  await sb.delete('offers',`?id=eq.${id}`);
-  loadAdminOffers();
+async function loadSettings(){
+  const{data}=await sb.sel('settings','?key=eq.delivery_charge');
+  if(data&&data[0])document.getElementById('delivery-charge-input').value=data[0].value;
+}
+async function saveDeliveryCharge(){
+  const val=parseFloat(document.getElementById('delivery-charge-input').value)||0;
+  await sb.upd('settings',{value:String(val)},'?key=eq.delivery_charge');
+  deliveryCharge=val;showAlert('settings-alert','✅ Settings saved!','success');
 }
 
-// ═══════════════════════════════════
-// INIT
-// ═══════════════════════════════════
-window.addEventListener('DOMContentLoaded',()=>{});
+window.addEventListener('DOMContentLoaded',()=>{loadDeliveryCharge();});
 document.getElementById('detail-overlay').addEventListener('click',function(e){if(e.target===this)closeDetail();});
+document.getElementById('order-detail-overlay').addEventListener('click',function(e){if(e.target===this)closeOrderDetail();});
+document.addEventListener('click',function(e){if(notifPanelOpen&&!e.target.closest('.bell-btn')&&!e.target.closest('.notif-panel')){notifPanelOpen=false;document.getElementById('notif-panel').classList.add('hidden');}});
 </script>
 </body>
 </html>

@@ -217,9 +217,21 @@ body{font-family:var(--font);background:var(--white);color:var(--black);font-siz
 
 <!-- STATUS PAGE -->
 <div id="status-page" class="hidden" style="min-height:100vh;">
-  <div class="page-header">
+  <div class="page-header" style="justify-content:space-between;">
     <button class="page-header-back" onclick="closeStatusPage()">&#8592;</button>
-    <div><div class="page-header-title">Check Status</div><div class="page-header-sub">&#2438;&#2474;&#2472;&#2494;&#2480; &#2470;&#2494;&#2476;&#2495;&#2480; &#2437;&#2476;&#2488;&#2509;&#2469;&#2494; &#2460;&#2494;&#2472;&#2497;&#2472;</div></div>
+    <div><div class="page-header-title">Check Status</div><div class="page-header-sub">আপনার দাবির অবস্থা জানুন</div></div>
+    <button class="bell-btn" onclick="toggleClaimerNotifPanel()" id="claimer-bell-btn" style="display:none;">
+      🔔<span class="bell-badge" id="claimer-bell-badge">0</span>
+    </button>
+  </div>
+  <div id="claimer-notif-panel" class="hidden">
+    <div class="notif-panel" style="top:60px;right:16px;">
+      <div style="padding:14px 16px;border-bottom:1px solid var(--gray-200);display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-weight:700;font-size:14px;">Notifications</span>
+        <button onclick="markClaimerNotifsRead()" style="background:none;border:none;font-size:12px;color:var(--blue);cursor:pointer;">Mark all read</button>
+      </div>
+      <div id="claimer-notif-list"><div class="no-data" style="padding:20px;">No notifications</div></div>
+    </div>
   </div>
   <div id="status-input-view" style="padding:28px 20px;max-width:480px;margin:0 auto;">
     <div style="text-align:center;margin-bottom:28px;">
@@ -639,6 +651,11 @@ function backToSearch(){
   document.getElementById('status-dashboard-view').classList.add('hidden');
   document.getElementById('status-input-view').classList.remove('hidden');
   document.getElementById('sp-mobile').value='';
+  const bell=document.getElementById('claimer-bell-btn');
+  if(bell)bell.style.display='none';
+  claimerNotifPanelOpen=false;
+  document.getElementById('claimer-notif-panel').classList.add('hidden');
+  currentClaimerMobile=null;
 }
 
 async function searchStatus(){
@@ -658,13 +675,23 @@ async function searchStatus(){
 }
 
 async function renderStatusDashboard(claims,mobile){
+  // Load claimer notifications and show bell
+  await loadClaimerNotifs(mobile);
+
   const{data:offers}=await sb.sel('offers','?order=publish_date.asc');
   const activeOffers=(offers||[]).filter(o=>!isExpired(o.expiry_date)&&!isScheduled(o.publish_date));
   const oldOffers=(offers||[]).filter(o=>isExpired(o.expiry_date));
   let myOrders=[];
   for(const c of claims){const{data:od}=await sb.sel('orders',`?claim_id=eq.${c.id}&status=neq.cancelled`);if(od)myOrders=[...myOrders,...od];}
   const orderedOfferIds=new Set(myOrders.map(o=>o.offer_id));
+
+  // Check if any claim has correction needed
+  const correctionClaims=claims.filter(c=>c.status==='correction');
+  const hasCorrection=correctionClaims.length>0;
+
   let html=`<div style="font-size:12px;color:var(--gray-500);margin-bottom:16px;">${claims.length} claim(s) &middot; <strong>${mobile}</strong></div>`;
+  // Only show offers if no correction needed claims
+  if(!hasCorrection){
   activeOffers.forEach(offer=>{
     const total=Number(offer.price)+deliveryCharge;
     const ordered=orderedOfferIds.has(offer.id);
@@ -685,19 +712,53 @@ async function renderStatusDashboard(claims,mobile){
       </div>
     </div>`;
   });
+  });
   if(oldOffers.length>0)html+=`<button class="view-all-btn" onclick="openAllOffersPage()">View All Past Offers (${oldOffers.length}) →</button>`;
+  } // end if(!hasCorrection)
+  // Show offers only if NO correction needed claims
+  // (offers already rendered above before this loop)
+
   for(const claim of claims){
     const{data:payments}=await sb.sel('payments',`?claim_id=eq.${claim.id}&order=paid_at.desc`);
     const pList=payments||[];
     const rd=Math.max(0,Number(claim.due_amount||0)-Number(claim.total_paid||0));
     const prog=claim.due_amount>0?Math.min(100,(Number(claim.total_paid||0)/Number(claim.due_amount||0))*100):0;
     const isCor=claim.status==='correction';
-    html+=`<div style="border:1px solid ${isCor?'#fcd34d':'var(--gray-200)'};border-radius:12px;overflow:hidden;margin-bottom:20px;">
+
+    // CORRECTION BLOCK: show warning + edit form, hide all services
+    if(isCor){
+      html+=`<div style="border:2px solid #fcd34d;border-radius:12px;overflow:hidden;margin-bottom:20px;">
+        <div style="background:#92400e;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;">
+          <div><div style="color:#fff;font-weight:800;font-size:15px;">${esc(claim.company)}</div><div style="color:rgba(255,255,255,.7);font-size:11px;margin-top:2px;">Submitted ${fmtDate(claim.created_at)} &middot; v${claim.version||1}</div></div>
+          <span class="badge badge-correction">⚠️ Correction Needed</span>
+        </div>
+        <div style="background:var(--yellow-light);padding:16px 18px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:14px;">
+            <div style="font-size:24px;flex-shrink:0;">⛔</div>
+            <div>
+              <div style="font-weight:800;font-size:14px;color:#92400e;margin-bottom:4px;">Service Unavailable</div>
+              <div style="font-size:13px;color:#78350f;line-height:1.6;">এই claim এর কোনো service পাওয়া যাবে না যতক্ষণ না আপনি নিচের সমস্যা ঠিক করে resubmit করেন।</div>
+            </div>
+          </div>
+          ${claim.correction_note?`<div class="correction-box" style="margin-bottom:14px;">
+            <div class="cb-title">⚠️ Admin Note</div>
+            <div class="cb-note">${esc(claim.correction_note)}</div>
+          </div>`:''}
+          <button class="btn btn-yellow btn-full" style="font-size:15px;padding:14px;" onclick="openEditClaimPage('${claim.id}')">✏️ Edit &amp; Resubmit Claim</button>
+        </div>
+        <div style="padding:14px 18px;background:#fff;">
+          <div style="font-size:13px;color:var(--gray-500);">👤 ${esc(claim.name)} &middot; Invested: ${fmt(claim.invested_amount)}</div>
+        </div>
+      </div>`;
+      continue; // Skip payment history and services for this claim
+    }
+
+    // NORMAL CLAIM CARD
+    html+=`<div style="border:1px solid var(--gray-200);border-radius:12px;overflow:hidden;margin-bottom:20px;">
       <div style="background:var(--black);padding:16px 18px;display:flex;justify-content:space-between;align-items:center;">
         <div><div style="color:#fff;font-weight:800;font-size:15px;">${esc(claim.company)}</div><div style="color:rgba(255,255,255,.5);font-size:11px;margin-top:2px;">Submitted ${fmtDate(claim.created_at)} &middot; v${claim.version||1}</div></div>
-        <span class="badge badge-${isCor?'correction':claim.status}">${isCor?'⚠️ Correction Needed':claim.status.charAt(0).toUpperCase()+claim.status.slice(1)}</span>
+        <span class="badge badge-${claim.status}">${claim.status.charAt(0).toUpperCase()+claim.status.slice(1)}</span>
       </div>
-      ${isCor&&claim.correction_note?`<div style="padding:14px 18px 0;"><div class="correction-box"><div class="cb-title">⚠️ Admin Note</div><div class="cb-note">${esc(claim.correction_note)}</div><button class="btn btn-yellow btn-sm" style="margin-top:10px;width:100%;" onclick="openEditClaimPage('${claim.id}')">✏️ Edit &amp; Resubmit</button></div></div>`:''}
       <div style="padding:14px 18px 0;font-size:13px;color:var(--gray-500);">👤 ${esc(claim.name)}</div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--gray-200);margin:14px 18px;border-radius:8px;overflow:hidden;">
         <div style="background:#fff;padding:12px 8px;text-align:center;"><div style="font-size:15px;font-weight:800;">${fmt(claim.invested_amount)}</div><div style="font-size:10px;color:var(--gray-500);font-weight:600;text-transform:uppercase;margin-top:2px;">Invested</div></div>
@@ -1160,10 +1221,56 @@ async function saveDeliveryCharge(){
   deliveryCharge=val;showAlert('settings-alert','✅ Settings saved!','success');
 }
 
+
+// ═══════════════════════════════════
+// CLAIMER NOTIFICATIONS
+// ═══════════════════════════════════
+let claimerNotifPanelOpen=false;
+let currentClaimerMobile=null;
+
+async function loadClaimerNotifs(mobile){
+  currentClaimerMobile=mobile;
+  const{data}=await sb.sel('notifications',`?for_mobile=eq.${mobile}&order=created_at.desc&limit=20`);
+  const notifs=data||[];
+  const unread=notifs.filter(n=>!n.is_read).length;
+  const bell=document.getElementById('claimer-bell-btn');
+  const badge=document.getElementById('claimer-bell-badge');
+  if(bell){bell.style.display='flex';}
+  if(badge){badge.textContent=unread>9?'9+':unread;badge.classList.toggle('show',unread>0);}
+  document.getElementById('claimer-notif-list').innerHTML=notifs.length?notifs.map(n=>`
+    <div class="notif-item ${n.is_read?'':'unread'}">
+      <div class="notif-item-title">${getNotifIcon(n.type)} ${esc(n.title)}</div>
+      <div class="notif-item-body">${esc(n.body||'')}</div>
+      <div class="notif-item-time">${fmtDT(n.created_at)}</div>
+    </div>`).join(''):`<div class="no-data" style="padding:20px;">No notifications</div>`;
+}
+
+function getNotifIcon(type){
+  const icons={payment:'💳',order_placed:'🛍',order_update:'📦',correction:'⚠️',status_update:'📋'};
+  return icons[type]||'🔔';
+}
+
+function toggleClaimerNotifPanel(){
+  claimerNotifPanelOpen=!claimerNotifPanelOpen;
+  document.getElementById('claimer-notif-panel').classList.toggle('hidden',!claimerNotifPanelOpen);
+  if(claimerNotifPanelOpen&&currentClaimerMobile)loadClaimerNotifs(currentClaimerMobile);
+}
+
+async function markClaimerNotifsRead(){
+  if(!currentClaimerMobile)return;
+  await sb.upd('notifications',{is_read:true},`?for_mobile=eq.${currentClaimerMobile}&is_read=eq.false`);
+  const badge=document.getElementById('claimer-bell-badge');
+  if(badge){badge.textContent='0';badge.classList.remove('show');}
+  if(currentClaimerMobile)loadClaimerNotifs(currentClaimerMobile);
+}
+
 window.addEventListener('DOMContentLoaded',()=>{loadDeliveryCharge();});
 document.getElementById('detail-overlay').addEventListener('click',function(e){if(e.target===this)closeDetail();});
 document.getElementById('order-detail-overlay').addEventListener('click',function(e){if(e.target===this)closeOrderDetail();});
-document.addEventListener('click',function(e){if(notifPanelOpen&&!e.target.closest('.bell-btn')&&!e.target.closest('.notif-panel')){notifPanelOpen=false;document.getElementById('notif-panel').classList.add('hidden');}});
+document.addEventListener('click',function(e){
+  if(notifPanelOpen&&!e.target.closest('.bell-btn')&&!e.target.closest('.notif-panel')){notifPanelOpen=false;document.getElementById('notif-panel').classList.add('hidden');}
+  if(claimerNotifPanelOpen&&!e.target.closest('#claimer-bell-btn')&&!e.target.closest('#claimer-notif-panel')){claimerNotifPanelOpen=false;document.getElementById('claimer-notif-panel').classList.add('hidden');}
+});
 </script>
 
 <script>
